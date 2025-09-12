@@ -1,0 +1,68 @@
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/appsettings.Development.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/appsettings.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto.staticwebassets.endpoints.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto.deps.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto.runtimeconfig.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Proyecto.pdb
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/Microsoft.OpenApi.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/bin/Debug/net9.0/QRCoder.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.csproj.AssemblyReference.cache
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.GeneratedMSBuildEditorConfig.editorconfig
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.AssemblyInfoInputs.cache
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.AssemblyInfo.cs
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.csproj.CoreCompileInputs.cache
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.MvcApplicationPartsAssemblyInfo.cs
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.MvcApplicationPartsAssemblyInfo.cache
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/scopedcss/bundle/Proyecto.styles.css
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets.build.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets.development.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets.build.endpoints.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.Proyecto.Microsoft.AspNetCore.StaticWebAssets.props
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.Proyecto.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.build.Proyecto.props
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.Proyecto.props
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.Proyecto.props
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/staticwebassets.pack.json
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.csproj.Up2Date
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/refint/Proyecto.dll
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.pdb
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/Proyecto.genruntimeconfig.cache
+/home/et12alumno/Descargas/Plan de-Aprendizaje/Proyecto/obj/Debug/net9.0/ref/Proyecto.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/appsettings.Development.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/appsettings.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto.staticwebassets.endpoints.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto.deps.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto.runtimeconfig.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Proyecto.pdb
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/Microsoft.OpenApi.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/bin/Debug/net9.0/QRCoder.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.csproj.AssemblyReference.cache
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.GeneratedMSBuildEditorConfig.editorconfig
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.AssemblyInfoInputs.cache
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.AssemblyInfo.cs
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.csproj.CoreCompileInputs.cache
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.MvcApplicationPartsAssemblyInfo.cs
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.MvcApplicationPartsAssemblyInfo.cache
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/scopedcss/bundle/Proyecto.styles.css
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets.build.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets.development.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets.build.endpoints.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.Proyecto.Microsoft.AspNetCore.StaticWebAssets.props
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.Proyecto.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.build.Proyecto.props
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.Proyecto.props
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.Proyecto.props
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/staticwebassets.pack.json
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.csproj.Up2Date
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/refint/Proyecto.dll
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.pdb
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/Proyecto.genruntimeconfig.cache
+/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/obj/Debug/net9.0/ref/Proyecto.dll

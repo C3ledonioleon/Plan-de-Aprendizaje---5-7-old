@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "0BhmNinvSAw=",
+  "success": true,
+  "projectFilePath": "/home/et12alumno/Documentos/Plan-de-Aprendizaje---5-7/Proyecto/Proyecto.csproj",
+  "expectedPackageFiles": [
+    "/home/et12alumno/.nuget/packages/microsoft.aspnetcore.openapi/9.0.6/microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/qrcoder/1.6.0/qrcoder.1.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}
