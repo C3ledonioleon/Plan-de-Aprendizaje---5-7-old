@@ -1,44 +1,43 @@
-using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
 using Proyecto.Models;
+using Proyecto.Interfaces;
+using Dapper;
+using System.Data;
+using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Proyecto.Controllers
+namespace Proyecto.Data
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EntradasController : ControllerBase
+    public class EntradaRepository : IEntradaRepository
     {
-        private readonly EntradaRepository _repo;
+        private readonly IConfiguration _configuration;
 
-        public EntradasController(EntradaRepository repo)
+        public EntradaRepository(IConfiguration configuration)
         {
-            _repo = repo;
+            _configuration = configuration;
         }
 
-        // GET /entradas
-        [HttpGet]
-        public ActionResult<List<Entrada>> GetEntradas()
+        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+        public List<Entrada> GetAll()
         {
-            return Ok(_repo.GetAll());
+            using var db = Connection;
+            return db.Query<Entrada>("SELECT * FROM Entrada").ToList();
         }
 
-        // GET /entradas/{entradaId}
-        [HttpGet("{entradaId}")]
-        public ActionResult<Entrada> GetEntrada(int entradaId)
+        public Entrada? GetById(int id)
         {
-            var entrada = _repo.GetById(entradaId);
-            if (entrada == null) return NotFound();
-            return Ok(entrada);
+            using var db = Connection;
+            return db.QueryFirstOrDefault<Entrada>("SELECT * FROM Entrada WHERE IdEntrada = @IdEntrada", new { IdEntrada = id });
         }
 
-        // POST /entradas/{entradaId}/anular
-        [HttpPost("{entradaId}/anular")]
-        public ActionResult AnularEntrada(int entradaId)
+        public bool Anular(int id)
         {
-            bool exito = _repo.Anular(entradaId);
-            if (!exito) return NotFound();
-            return NoContent();
+            using var db = Connection;
+            string sql = "UPDATE Entrada SET Estado = 'Anulada' WHERE IdEntrada = @IdEntrada";
+            int rows = db.Execute(sql, new { IdEntrada = id });
+            return rows > 0;
         }
     }
 }

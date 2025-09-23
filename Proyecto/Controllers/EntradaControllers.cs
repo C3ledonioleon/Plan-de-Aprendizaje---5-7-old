@@ -1,42 +1,44 @@
+using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Dapper;
-using System.Data;
-using MySql.Data.MySqlClient;
-using Microsoft.Extensions.Configuration;
+using Proyecto.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Proyecto.Data
+namespace Proyecto.Controllers
 {
-    public class EntradaRepository
+    [ApiController]
+    [Route("api/[controller]")]
+    public class EntradasController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IEntradaRepository _repo;
 
-        public EntradaRepository(IConfiguration configuration)
+        public EntradasController(IEntradaRepository repo)
         {
-            _configuration = configuration;
+            _repo = repo;
         }
 
-        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-
-        public List<Entrada> GetAll()
+        // GET /entradas
+        [HttpGet]
+        public ActionResult<List<Entrada>> GetEntradas()
         {
-            using var db = Connection;
-            return db.Query<Entrada>("SELECT * FROM Entrada").ToList();
+            return Ok(_repo.GetAll());
         }
 
-        public Entrada? GetById(int id)
+        // GET /entradas/{entradaId}
+        [HttpGet("{entradaId}")]
+        public ActionResult<Entrada> GetEntrada(int entradaId)
         {
-            using var db = Connection;
-            return db.QueryFirstOrDefault<Entrada>("SELECT * FROM Entrada WHERE IdEntrada = @IdEntrada", new { IdEntrada = id });
+            var entrada = _repo.GetById(entradaId);
+            if (entrada == null) return NotFound();
+            return Ok(entrada);
         }
 
-        public bool Anular(int id)
+        // POST /entradas/{entradaId}/anular
+        [HttpPost("{entradaId}/anular")]
+        public ActionResult AnularEntrada(int entradaId)
         {
-            using var db = Connection;
-            string sql = "DELETE FROM Entrada WHERE IdEntrada = @IdEntrada"; // Si querés, podés usar un flag "Anulado" en lugar de eliminar
-            int rows = db.Execute(sql, new { IdEntrada = id });
-            return rows > 0;
+            bool exito = _repo.Anular(entradaId);
+            if (!exito) return NotFound();
+            return NoContent();
         }
     }
 }

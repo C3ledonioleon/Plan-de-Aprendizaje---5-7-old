@@ -1,12 +1,13 @@
 using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
+using Proyecto.Interfaces;
 using System.Data;
 using System.Collections.Generic;
 
 namespace Proyecto.Data
 {
-    public class FuncionRepository
+    public class FuncionRepository : IFuncionRepository
     {
         private readonly string _connectionString;
 
@@ -17,7 +18,6 @@ namespace Proyecto.Data
 
         private IDbConnection Connection => new MySqlConnection(_connectionString);
 
-        // Crear nueva función
         public int Add(Funcion funcion)
         {
             using var db = Connection;
@@ -28,7 +28,6 @@ namespace Proyecto.Data
             return db.ExecuteScalar<int>(sql, funcion);
         }
 
-        // Listar todas las funciones
         public IEnumerable<Funcion> GetAll()
         {
             using var db = Connection;
@@ -36,7 +35,6 @@ namespace Proyecto.Data
             return db.Query<Funcion>(sql);
         }
 
-        // Obtener función por ID
         public Funcion? GetById(int id)
         {
             using var db = Connection;
@@ -44,7 +42,6 @@ namespace Proyecto.Data
             return db.QueryFirstOrDefault<Funcion>(sql, new { Id = id });
         }
 
-        // Actualizar función
         public bool Update(Funcion funcion)
         {
             using var db = Connection;
@@ -56,7 +53,6 @@ namespace Proyecto.Data
             return rows > 0;
         }
 
-        // Cancelar función
         public bool Cancelar(int id)
         {
             using var db = Connection;

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Proyecto.Data
 {
-    public class ClienteRepository
+    public class ClienteRepository : IClienteRepository
     {
         private readonly IConfiguration _configuration;
 
@@ -28,7 +28,9 @@ namespace Proyecto.Data
         public Cliente? GetById(int id)
         {
             using var db = Connection;
-            return db.QueryFirstOrDefault<Cliente>("SELECT * FROM Cliente WHERE IdCliente = @IdCliente", new { IdCliente = id });
+            return db.QueryFirstOrDefault<Cliente>(
+                "SELECT * FROM Cliente WHERE IdCliente = @IdCliente", 
+                new { IdCliente = id });
         }
 
         public int Add(Cliente cliente)

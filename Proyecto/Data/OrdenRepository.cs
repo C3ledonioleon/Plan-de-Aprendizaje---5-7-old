@@ -1,39 +1,23 @@
-using Proyecto.Models;
-using System.Data;
-using MySql.Data.MySqlClient;
-using Microsoft.Extensions.Configuration;
 using Dapper;
+using MySql.Data.MySqlClient;
+using Proyecto.Models;
+using Proyecto.Interfaces;
+using System.Data;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Proyecto.Data
 {
-    public class OrdenRepository
+    public class OrdenRepository : IOrdenRepository
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
 
-        public OrdenRepository(IConfiguration configuration)
+        public OrdenRepository(string connectionString)
         {
-            _configuration = configuration;
+            _connectionString = connectionString;
         }
 
-        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        private IDbConnection Connection => new MySqlConnection(_connectionString);
 
-        // Obtener todas las órdenes
-        public List<Orden> GetAll()
-        {
-            using var db = Connection;
-            return db.Query<Orden>("SELECT * FROM Orden").ToList();
-        }
-
-        // Obtener orden por Id
-        public Orden? GetById(int id)
-        {
-            using var db = Connection;
-            return db.QueryFirstOrDefault<Orden>("SELECT * FROM Orden WHERE IdOrden = @IdOrden", new { IdOrden = id });
-        }
-
-        // Crear orden
         public int Add(Orden orden)
         {
             using var db = Connection;
@@ -41,47 +25,58 @@ namespace Proyecto.Data
                 INSERT INTO Orden (FechaOrden, IdCliente)
                 VALUES (@FechaOrden, @IdCliente);
                 SELECT LAST_INSERT_ID();";
-            int newId = db.ExecuteScalar<int>(sql, orden);
-            orden.IdOrden = newId;
-            return newId;
+            return db.ExecuteScalar<int>(sql, orden);
         }
 
-        // Marcar orden como pagada y generar entradas
-        public void Pagar(int ordenId, List<Entrada> entradas)
+        public List<Orden> GetAll()
         {
             using var db = Connection;
-            using var transaction = db.BeginTransaction();
+            string sql = "SELECT * FROM Orden";
+            return db.Query<Orden>(sql).AsList();
+        }
+
+        public Orden? GetById(int id)
+        {
+            using var db = Connection;
+            string sql = "SELECT * FROM Orden WHERE IdOrden = @Id";
+            return db.QueryFirstOrDefault<Orden>(sql, new { Id = id });
+        }
+
+        public void Pagar(int id, List<Entrada> entradas)
+        {
+            using var db = Connection;
+            using var tran = db.BeginTransaction();
 
             try
             {
-                // Aquí podrías actualizar un campo "Estado" de la orden si existiera
-                // db.Execute("UPDATE Orden SET Estado = 'Pagada' WHERE IdOrden = @IdOrden", new { IdOrden = ordenId }, transaction);
+                // Marcar orden como pagada
+                string sqlOrden = "UPDATE Orden SET Pagada = 1 WHERE IdOrden = @Id";
+                db.Execute(sqlOrden, new { Id = id }, tran);
 
+                // Insertar entradas asociadas
                 foreach (var entrada in entradas)
                 {
-                    entrada.IdOrden = ordenId;
-                    string sql = @"
+                    entrada.IdOrden = id;
+                    string sqlEntrada = @"
                         INSERT INTO Entrada (Precio, IdOrden, IdTarifa)
-                        VALUES (@Precio, @IdOrden, @IdTarifa);";
-                    db.Execute(sql, entrada, transaction);
+                        VALUES (@Precio, @IdOrden, @IdTarifa)";
+                    db.Execute(sqlEntrada, entrada, tran);
                 }
 
-                transaction.Commit();
+                tran.Commit();
             }
             catch
             {
-                transaction.Rollback();
+                tran.Rollback();
                 throw;
             }
         }
 
-        // Cancelar orden
-        public bool Cancelar(int ordenId)
+        public bool Cancelar(int id)
         {
             using var db = Connection;
-            // Opcional: validar que la orden no esté pagada
-            string sql = "DELETE FROM Orden WHERE IdOrden = @IdOrden";
-            int rows = db.Execute(sql, new { IdOrden = ordenId });
+            string sql = "UPDATE Orden SET Cancelada = 1 WHERE IdOrden = @Id";
+            int rows = db.Execute(sql, new { Id = id });
             return rows > 0;
         }
     }

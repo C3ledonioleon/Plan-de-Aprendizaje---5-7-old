@@ -1,55 +1,51 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Models;
 using Proyecto.Data;
+using Proyecto.Models;
 using System.Collections.Generic;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("clientes")]
-    public class ClienteController : ControllerBase
+    [Route("api/[controller]")]
+    public class ClientesController : ControllerBase
     {
-        private readonly ClienteRepository _repo;
+        private readonly IClienteRepository _repo;
 
-        public ClienteController(ClienteRepository repo)
+        public ClientesController(IClienteRepository repo)
         {
             _repo = repo;
         }
 
-        private string EncriptarHash256(string texto)
-        {
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                var bytes = System.Text.Encoding.UTF8.GetBytes(texto);
-                var hash = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
-            }
-        }
-
+        // POST /clientes
         [HttpPost]
-        public ActionResult<Cliente> CrearCliente([FromBody] Cliente cliente)
+        public ActionResult<Cliente> CrearCliente(Cliente cliente)
         {
-
-            cliente.Nombre = EncriptarHash256(cliente.Nombre) ;
-            _repo.Add(cliente);
-            return CreatedAtAction(nameof(DetalleCliente), new { clienteId = cliente.IdCliente }, cliente);
+            int id = _repo.Add(cliente);
+            return CreatedAtAction(nameof(GetCliente), new { clienteId = id }, cliente);
         }
 
+        // GET /clientes
         [HttpGet]
-        public ActionResult<List<Cliente>> ListarClientes() => Ok(_repo.GetAll());
+        public ActionResult<List<Cliente>> GetClientes()
+        {
+            return Ok(_repo.GetAll());
+        }
 
+        // GET /clientes/{clienteId}
         [HttpGet("{clienteId}")]
-        public ActionResult<Cliente> DetalleCliente(int clienteId)
+        public ActionResult<Cliente> GetCliente(int clienteId)
         {
             var cliente = _repo.GetById(clienteId);
             if (cliente == null) return NotFound();
             return Ok(cliente);
         }
 
+        // PUT /clientes/{clienteId}
         [HttpPut("{clienteId}")]
-        public IActionResult ActualizarCliente(int clienteId, [FromBody] Cliente cliente)
+        public ActionResult ActualizarCliente(int clienteId, Cliente cliente)
         {
-            if (!_repo.Update(clienteId, cliente)) return NotFound();
+            bool actualizado = _repo.Update(clienteId, cliente);
+            if (!actualizado) return NotFound();
             return NoContent();
         }
     }

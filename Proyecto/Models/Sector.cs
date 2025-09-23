@@ -1,23 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Proyecto.Entidades;
-public class Sector
+namespace Proyecto.Models
 {
-    public int IdSector { get; set; }
-    public string NombreSector { get; set; }
-    public int CapacidadSector { get; set; }
-    public decimal PrecioBase { get; set; }
-    public int LocalId { get; set; }
-
-    public Sector(int idSector, string nombreSector, int capacidadSector, decimal precioBase, int localId)
+    public class Sector
     {
-        this.IdSector = idSector;
-        this.NombreSector = nombreSector;
-        this.CapacidadSector = capacidadSector;
-        this.PrecioBase = precioBase;
-        this.LocalId = localId;
+        public int IdSector { get; set; }
+        public string Nombre { get; set; }
+        public int Capacidad { get; set; }
+        public int IdLocal { get; set; }
+        public Local Local { get; set; }
+
+        public Sector (int idSector, string nombre, int capacidad, int idLocal)
+        {
+            this.IdSector = idSector;
+            this.Nombre = nombre;
+            this.Capacidad = capacidad;
+            this.IdLocal = idLocal;
+        }
+
     }
 }

@@ -1,77 +1,83 @@
-using Dapper;
-using MySql.Data.MySqlClient;
 using Proyecto.Models;
+using Proyecto.Interfaces;
+using Dapper;
 using System.Data;
+using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Proyecto.Data
 {
-    public class EventoRepository
+    public class EventoRepository : IEventoRepository
     {
-        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public EventoRepository(string connectionString)
+        public EventoRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
-        // Conexión a la base de datos
-        private IDbConnection Connection => new MySqlConnection(_connectionString);
+        private IDbConnection Connection => new MySqlConnection(
+            _configuration.GetConnectionString("DefaultConnection")
+        );
 
-        // Agregar un nuevo evento
         public int Add(Evento evento)
         {
             using var db = Connection;
             string sql = @"
-                INSERT INTO Evento (Nombre, Genero, FechaInicio, FechaFin, Publicado, Cancelado)
-                VALUES (@Nombre, @Genero, @FechaInicio, @FechaFin, @Publicado, @Cancelado);
+                INSERT INTO Evento (Nombre, Genero, FechaInicio, FechaFin)
+                VALUES (@Nombre, @Genero, @FechaInicio, @FechaFin);
                 SELECT LAST_INSERT_ID();";
-            return db.ExecuteScalar<int>(sql, evento);
+
+            int newId = db.ExecuteScalar<int>(sql, evento);
+            evento.IdEvento = newId;
+            return newId;
         }
 
-        // Listar todos los eventos
-        public IEnumerable<Evento> GetAll()
+        public List<Evento> GetAll()
         {
             using var db = Connection;
-            string sql = "SELECT * FROM Evento";
-            return db.Query<Evento>(sql);
+            return db.Query<Evento>("SELECT * FROM Evento").ToList();
         }
 
-        // Obtener evento por ID
         public Evento? GetById(int id)
         {
             using var db = Connection;
-            string sql = "SELECT * FROM Evento WHERE IdEvento = @Id";
-            return db.QueryFirstOrDefault<Evento>(sql, new { Id = id });
+            return db.QueryFirstOrDefault<Evento>(
+                "SELECT * FROM Evento WHERE IdEvento = @IdEvento",
+                new { IdEvento = id }
+            );
         }
 
-        // Actualizar evento
         public bool Update(Evento evento)
         {
             using var db = Connection;
             string sql = @"
                 UPDATE Evento
-                SET Nombre = @Nombre, Genero = @Genero, FechaInicio = @FechaInicio, FechaFin = @FechaFin
+                SET Nombre = @Nombre,
+                    Genero = @Genero,
+                    FechaInicio = @FechaInicio,
+                    FechaFin = @FechaFin
                 WHERE IdEvento = @IdEvento";
+
             int rows = db.Execute(sql, evento);
             return rows > 0;
         }
 
-        // Publicar evento
         public bool Publicar(int id)
         {
             using var db = Connection;
-            string sql = "UPDATE Evento SET Publicado = 1 WHERE IdEvento = @Id";
-            int rows = db.Execute(sql, new { Id = id });
+            string sql = "UPDATE Evento SET Estado = 'Publicado' WHERE IdEvento = @IdEvento";
+            int rows = db.Execute(sql, new { IdEvento = id });
             return rows > 0;
         }
 
-        // Cancelar evento
         public bool Cancelar(int id)
         {
             using var db = Connection;
-            string sql = "UPDATE Evento SET Cancelado = 1 WHERE IdEvento = @Id";
-            int rows = db.Execute(sql, new { Id = id });
+            string sql = "UPDATE Evento SET Estado = 'Cancelado' WHERE IdEvento = @IdEvento";
+            int rows = db.Execute(sql, new { IdEvento = id });
             return rows > 0;
         }
     }

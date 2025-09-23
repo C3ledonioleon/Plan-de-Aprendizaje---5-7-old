@@ -1,23 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
 using Proyecto.Models;
+using Proyecto.Interfaces;
+using System.Collections.Generic;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FuncionController : ControllerBase
+    public class FuncionesController : ControllerBase
     {
-        private readonly FuncionRepository _repo;
+        private readonly IFuncionRepository _repo;
 
-        public FuncionController(FuncionRepository repo)
+        public FuncionesController(IFuncionRepository repo)
         {
             _repo = repo;
         }
 
         // POST /funciones
         [HttpPost]
-        public IActionResult CrearFuncion(Funcion funcion)
+        public ActionResult<int> CrearFuncion(Funcion funcion)
         {
             int id = _repo.Add(funcion);
             return CreatedAtAction(nameof(DetalleFuncion), new { funcionId = id }, new { Id = id });
@@ -25,14 +26,14 @@ namespace Proyecto.Controllers
 
         // GET /funciones
         [HttpGet]
-        public IActionResult ListarFunciones()
+        public ActionResult<IEnumerable<Funcion>> ListarFunciones()
         {
             return Ok(_repo.GetAll());
         }
 
         // GET /funciones/{funcionId}
         [HttpGet("{funcionId}")]
-        public IActionResult DetalleFuncion(int funcionId)
+        public ActionResult<Funcion> DetalleFuncion(int funcionId)
         {
             var funcion = _repo.GetById(funcionId);
             if (funcion == null) return NotFound();
@@ -41,7 +42,7 @@ namespace Proyecto.Controllers
 
         // PUT /funciones/{funcionId}
         [HttpPut("{funcionId}")]
-        public IActionResult ActualizarFuncion(int funcionId, Funcion funcion)
+        public ActionResult ActualizarFuncion(int funcionId, Funcion funcion)
         {
             funcion.IdFuncion = funcionId;
             bool actualizado = _repo.Update(funcion);
@@ -50,7 +51,7 @@ namespace Proyecto.Controllers
 
         // POST /funciones/{funcionId}/cancelar
         [HttpPost("{funcionId}/cancelar")]
-        public IActionResult CancelarFuncion(int funcionId)
+        public ActionResult CancelarFuncion(int funcionId)
         {
             bool cancelado = _repo.Cancelar(funcionId);
             return cancelado ? Ok("Función cancelada") : NotFound();

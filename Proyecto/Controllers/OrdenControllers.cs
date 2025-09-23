@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
 using Proyecto.Models;
+using Proyecto.Interfaces;
 using System.Collections.Generic;
 
 namespace Proyecto.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class OrdenController : ControllerBase
     {
-        private readonly OrdenRepository _repository;
+        private readonly IOrdenRepository _repository;
 
-        public OrdenController(OrdenRepository repository)
+        public OrdenController(IOrdenRepository repository)
         {
             _repository = repository;
         }
@@ -28,7 +28,7 @@ namespace Proyecto.Controllers
         [HttpGet]
         public ActionResult<List<Orden>> GetAll()
         {
-            return _repository.GetAll();
+            return Ok(_repository.GetAll());
         }
 
         // GET /ordenes/{ordenId}

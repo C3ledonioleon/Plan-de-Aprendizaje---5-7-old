@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
+using Proyecto.Interfaces;
 using Proyecto.Models;
+using System.Collections.Generic;
 
 namespace Proyecto.Controllers
 {
@@ -8,9 +9,9 @@ namespace Proyecto.Controllers
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
-        private readonly EventoRepository _repo;
+        private readonly IEventoRepository _repo;
 
-        public EventoController(EventoRepository repo)
+        public EventoController(IEventoRepository repo)
         {
             _repo = repo;
         }
@@ -20,19 +21,19 @@ namespace Proyecto.Controllers
         public IActionResult CrearEvento(Evento evento)
         {
             int id = _repo.Add(evento);
-            return CreatedAtAction(nameof(DetalleEvento), new { eventoId = id }, new { Id = id });
+            return CreatedAtAction(nameof(DetalleEvento), new { eventoId = id }, evento);
         }
 
         // GET /eventos
         [HttpGet]
-        public IActionResult ListarEventos()
+        public ActionResult<List<Evento>> ListarEventos()
         {
             return Ok(_repo.GetAll());
         }
 
         // GET /eventos/{eventoId}
         [HttpGet("{eventoId}")]
-        public IActionResult DetalleEvento(int eventoId)
+        public ActionResult<Evento> DetalleEvento(int eventoId)
         {
             var evento = _repo.GetById(eventoId);
             if (evento == null) return NotFound();
@@ -45,7 +46,8 @@ namespace Proyecto.Controllers
         {
             evento.IdEvento = eventoId;
             bool actualizado = _repo.Update(evento);
-            return actualizado ? Ok() : NotFound();
+            if (!actualizado) return NotFound();
+            return Ok(evento);
         }
 
         // POST /eventos/{eventoId}/publicar
@@ -53,7 +55,8 @@ namespace Proyecto.Controllers
         public IActionResult PublicarEvento(int eventoId)
         {
             bool publicado = _repo.Publicar(eventoId);
-            return publicado ? Ok("Evento publicado") : NotFound();
+            if (!publicado) return NotFound();
+            return Ok(new { mensaje = "Evento publicado" });
         }
 
         // POST /eventos/{eventoId}/cancelar
@@ -61,7 +64,8 @@ namespace Proyecto.Controllers
         public IActionResult CancelarEvento(int eventoId)
         {
             bool cancelado = _repo.Cancelar(eventoId);
-            return cancelado ? Ok("Evento cancelado") : NotFound();
+            if (!cancelado) return NotFound();
+            return Ok(new { mensaje = "Evento cancelado" });
         }
     }
 }
