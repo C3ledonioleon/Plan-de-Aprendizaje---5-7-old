@@ -1,5 +1,8 @@
 using Proyecto.Services;
-using Proyecto.Data;
+using Proyecto.Repositories.Contracts;
+using Proyecto.Interfaces;
+using Proyecto.Controllers;
+using Proyecto.Repositories.Contratcs;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSingleton<QRService>();
-builder.Services.AddSingleton<ClienteRepository>();
+
+builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
+builder.Services.AddTransient<IEntradaRepository,EntradaRepository >();
+builder.Services.AddTransient<IEventoRepository, EventoRepository>();
+builder.Services.AddTransient<IFuncionRepository, FuncionRepository>();
+builder.Services.AddTransient<IOrdenRepository, OrdenRepository>();
+builder.Services.AddTransient<ISectorRepository, SectorRepository>();
+builder.Services.AddTransient<ILocalRepository, LocalRepository>();
+builder.Services.AddTransient<ITarifaRepository, TarifaRepository>();
+
 
 // Registrar ClienteRepository con la cadena de conexión
 builder.Services.AddEndpointsApiExplorer();

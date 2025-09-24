@@ -5,7 +5,7 @@ using Proyecto.Interfaces;
 using System.Data;
 using System.Collections.Generic;
 
-namespace Proyecto.Data
+namespace Proyecto.Repositories.Contracts
 {
     public class OrdenRepository : IOrdenRepository
     {

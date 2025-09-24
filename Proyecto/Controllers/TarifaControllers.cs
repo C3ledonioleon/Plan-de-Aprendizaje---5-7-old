@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
 using Proyecto.Models;
-using System.Collections.Generic;
+using Proyecto.Repositories.Contracts;
+using System.Linq;
 
 namespace Proyecto.Controllers
 {
@@ -9,43 +9,52 @@ namespace Proyecto.Controllers
     [Route("api/[controller]")]
     public class TarifasController : ControllerBase
     {
-        private readonly TarifaRepository _repo;
+        private readonly ITarifaRepository _tarifaRepository;
 
-        public TarifasController(TarifaRepository repo)
+        public TarifasController(ITarifaRepository tarifaRepository)
         {
-            _repo = repo;
+            _tarifaRepository = tarifaRepository;
         }
 
         // POST /tarifas
         [HttpPost]
-        public ActionResult<Tarifa> CrearTarifa(Tarifa tarifa)
+        public IActionResult Create([FromBody] Tarifa tarifa)
         {
-            int id = _repo.Add(tarifa);
-            return CreatedAtAction(nameof(GetTarifa), new { tarifaId = id }, tarifa);
+            if (tarifa == null) return BadRequest();
+
+            var id = _tarifaRepository.Add(tarifa);
+            return CreatedAtAction(nameof(GetById), new { tarifaId = id }, tarifa);
         }
 
         // GET /funciones/{funcionId}/tarifas
-        [HttpGet("/funciones/{funcionId}/tarifas")]
-        public ActionResult<List<Tarifa>> GetTarifasPorFuncion(int funcionId)
+        [HttpGet("/api/funciones/{funcionId}/tarifas")]
+        public IActionResult GetByFuncion(int funcionId)
         {
-            return Ok(_repo.GetByFuncion(funcionId));
+            var tarifas = _tarifaRepository.GetByFuncionId(funcionId);
+            if (tarifas == null || !tarifas.Any()) return NotFound();
+
+            return Ok(tarifas);
         }
 
         // GET /tarifas/{tarifaId}
         [HttpGet("{tarifaId}")]
-        public ActionResult<Tarifa> GetTarifa(int tarifaId)
+        public IActionResult GetById(int tarifaId)
         {
-            var tarifa = _repo.GetById(tarifaId);
+            var tarifa = _tarifaRepository.GetById(tarifaId);
             if (tarifa == null) return NotFound();
+
             return Ok(tarifa);
         }
 
         // PUT /tarifas/{tarifaId}
         [HttpPut("{tarifaId}")]
-        public ActionResult ActualizarTarifa(int tarifaId, Tarifa tarifa)
+        public IActionResult Update(int tarifaId, [FromBody] Tarifa tarifa)
         {
-            bool exito = _repo.Update(tarifaId, tarifa);
-            if (!exito) return NotFound();
+            if (tarifa == null || tarifa.IdTarifa != tarifaId) return BadRequest();
+
+            var updated = _tarifaRepository.Update(tarifa);
+            if (!updated) return NotFound();
+
             return NoContent();
         }
     }

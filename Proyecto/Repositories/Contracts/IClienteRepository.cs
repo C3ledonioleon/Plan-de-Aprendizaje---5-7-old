@@ -1,7 +1,8 @@
 using Proyecto.Models;
 using System.Collections.Generic;
+using Proyecto.Repositories.Contracts;
 
-namespace Proyecto.Data
+namespace Proyecto.Repositories.Contratcs
 {
     public interface IClienteRepository
     {

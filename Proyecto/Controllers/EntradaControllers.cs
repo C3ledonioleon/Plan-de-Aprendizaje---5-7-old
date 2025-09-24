@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class EntradasController : ControllerBase
     {
         private readonly IEntradaRepository _repo;

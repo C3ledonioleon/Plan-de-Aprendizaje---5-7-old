@@ -1,12 +1,13 @@
 using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
+using Proyecto.Repositories.Contracts;
 using System.Data;
 using System.Collections.Generic;
 
-namespace Proyecto.Data
+namespace Proyecto.Repositories.Contracts
 {
-    public class LocalRepository
+    public class LocalRepository : ILocalRepository
     {
         private readonly string _connectionString;
 
@@ -36,7 +37,10 @@ namespace Proyecto.Data
         public Local GetById(int id)
         {
             using var db = Connection;
-            return db.QueryFirstOrDefault<Local>("SELECT * FROM Local WHERE IdLocal = @IdLocal", new { IdLocal = id });
+            return db.QueryFirstOrDefault<Local>(
+                "SELECT * FROM Local WHERE IdLocal = @IdLocal",
+                new { IdLocal = id }
+            );
         }
 
         public bool Update(Local local)

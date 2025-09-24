@@ -1,26 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/et12alumno/Descargas/Plan-de-Aprendizaje---5-7/Proyecto/Proyecto.csproj": {}
+    "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\Proyecto\\Proyecto.csproj": {}
   },
   "projects": {
-    "/home/et12alumno/Descargas/Plan-de-Aprendizaje---5-7/Proyecto/Proyecto.csproj": {
+    "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\Proyecto\\Proyecto.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/et12alumno/Descargas/Plan-de-Aprendizaje---5-7/Proyecto/Proyecto.csproj",
+        "projectUniqueName": "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\Proyecto\\Proyecto.csproj",
         "projectName": "Proyecto",
-        "projectPath": "/home/et12alumno/Descargas/Plan-de-Aprendizaje---5-7/Proyecto/Proyecto.csproj",
-        "packagesPath": "/home/et12alumno/.nuget/packages/",
-        "outputPath": "/home/et12alumno/Descargas/Plan-de-Aprendizaje---5-7/Proyecto/obj/",
+        "projectPath": "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\Proyecto\\Proyecto.csproj",
+        "packagesPath": "C:\\Users\\Celedonio\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\Proyecto\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/et12alumno/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Celedonio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0": {
@@ -85,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/9.0.109/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Data;
+using Proyecto.Repositories.Contracts;
 using Proyecto.Models;
 using System.Collections.Generic;
+using Proyecto.Repositories.Contratcs;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class ClientesController : ControllerBase
     {
         private readonly IClienteRepository _repo;

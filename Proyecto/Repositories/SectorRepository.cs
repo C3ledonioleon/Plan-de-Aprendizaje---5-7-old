@@ -4,7 +4,7 @@ using Proyecto.Models;
 using Proyecto.Interfaces;
 using System.Collections.Generic;
 
-namespace Proyecto.Repositories
+namespace Proyecto.Repositories.Contracts
 {
     public class SectorRepository : ISectorRepository
     {

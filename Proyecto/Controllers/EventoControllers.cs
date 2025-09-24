@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class EventoController : ControllerBase
     {
         private readonly IEventoRepository _repo;

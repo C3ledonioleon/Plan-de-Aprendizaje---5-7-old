@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Proyecto.Data
+namespace Proyecto.Repositories.Contracts
 {
     public class EntradaRepository : IEntradaRepository
     {
