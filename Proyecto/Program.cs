@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSingleton<QRService>();
-
+// Las Interfaz y los repository 
 builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 builder.Services.AddTransient<IEntradaRepository,EntradaRepository >();
 builder.Services.AddTransient<IEventoRepository, EventoRepository>();
