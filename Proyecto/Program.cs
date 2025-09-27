@@ -1,8 +1,3 @@
-using Proyecto.Services;
-using Proyecto.Repositories.Contracts;
-using Proyecto.Interfaces;
-using Proyecto.Controllers;
-using Proyecto.Repositories.Contratcs;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
