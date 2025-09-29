@@ -9,7 +9,8 @@ namespace Proyecto.Models
         public Orden? Orden { get; set; }
         public Tarifa? Tarifa { get; set; }
         public EstadoEntrada Estado { get; set; }
-        Entrada()
+        
+        public Entrada()
         { }
     }
 

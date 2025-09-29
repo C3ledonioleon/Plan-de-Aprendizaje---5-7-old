@@ -12,7 +12,7 @@ namespace Proyecto.Models
         public List<Sector> Sectores { get; set; } = new();
         public List<Funcion> Funciones { get; set; } = new();
         
-        Local()
+        public Local()
         { }
     }
 }

@@ -8,7 +8,8 @@ namespace Proyecto.Models
         public int IdLocal { get; set; }               
         public Local Local { get; set; }     
         public List<Tarifa> Tarifas { get; set; } 
-         Sector()
+         
+        public Sector()
         { }
     }
 

@@ -11,7 +11,8 @@ namespace Proyecto.Models
         public Cliente Cliente { get; set; }
         public Tarifa Tarifa { get; set; }
         public List<Entrada> Entradas { get; set; }
-      Orden()
+
+        public Orden()
       { }
 
     }

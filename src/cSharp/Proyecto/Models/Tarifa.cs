@@ -11,7 +11,7 @@ namespace Proyecto.Models
         public Sector? Sector { get; set; }
         public EstadoTarifa Estado { get; set; }
         public List<Entrada> Entradas { get; set; } 
-        Tarifa()
+        public Tarifa()
         { }
     }
 

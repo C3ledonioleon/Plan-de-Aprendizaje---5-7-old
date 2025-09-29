@@ -15,15 +15,14 @@ namespace Proyecto.Controllers
             _ordenService = ordenService;
         }
 
-        // POST /ordenes — Crea orden y reserva stock
         [HttpPost]
-        public IActionResult CrearOrden([FromBody] Orden orden)
+        public IActionResult CrearOrden(Orden orden)
         {
             var id = _ordenService.AgregarOrden(orden);
             return CreatedAtAction(nameof(ObtenerOrden), new { ordenId = id }, orden);
         }
 
-        // GET /ordenes — Lista todas las órdenes
+  
         [HttpGet]
         public IActionResult ObtenerOrdenes()
         {
@@ -31,7 +30,7 @@ namespace Proyecto.Controllers
             return Ok(ordenes);
         }
 
-        // GET /ordenes/{ordenId} — Detalle de una orden
+
         [HttpGet("{ordenId}")]
         public IActionResult ObtenerOrden(int ordenId)
         {
@@ -40,7 +39,7 @@ namespace Proyecto.Controllers
             return Ok(orden);
         }
 
-        // PUT /ordenes/{ordenId} — Actualiza orden
+ 
         [HttpPut("{ordenId}")]
         public IActionResult ActualizarOrden(int ordenId, [FromBody] Orden orden)
         {
@@ -49,7 +48,7 @@ namespace Proyecto.Controllers
             return NoContent();
         }
 
-        // DELETE /ordenes/{ordenId} — Elimina orden
+
         [HttpDelete("{ordenId}")]
         public IActionResult EliminarOrden(int ordenId)
         {
@@ -58,7 +57,7 @@ namespace Proyecto.Controllers
             return NoContent();
         }
 
-        // POST /ordenes/{ordenId}/pagar — Marca como Pagada y emite Entradas
+   
         [HttpPost("{ordenId}/pagar")]
         public IActionResult PagarOrden(int ordenId)
         {
@@ -70,12 +69,12 @@ namespace Proyecto.Controllers
             orden.Estado = EstadoOrden.Pagada;
             _ordenService.ActualizarOrden(ordenId, orden);
 
-            // Aquí podrías agregar la lógica de emisión de entradas
+ 
 
             return Ok(new { mensaje = "Orden pagada y entradas emitidas." });
         }
 
-        // POST /ordenes/{ordenId}/cancelar — Cancela la orden (si está Creada)
+
         [HttpPost("{ordenId}/cancelar")]
         public IActionResult CancelarOrden(int ordenId)
         {
@@ -87,7 +86,7 @@ namespace Proyecto.Controllers
             orden.Estado = EstadoOrden.Cancelada;
             _ordenService.ActualizarOrden(ordenId, orden);
 
-            // Aquí podrías liberar el stock reservado
+
 
             return Ok(new { mensaje = "Orden cancelada y stock liberado." });
         }

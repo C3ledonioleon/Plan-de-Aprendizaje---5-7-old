@@ -11,13 +11,14 @@ namespace Proyecto.Models
         public EstadoFuncion Estado { get; set; }
         public Evento? Evento { get; set; }
         public Local? Local { get; set; }
-        Funcion()
+        
+        public Funcion()
         { }
     }
     public enum EstadoFuncion
     {
-        Pendiente,  // Función creada y pendiente de realizarse
-        Cancelada,   // Función cancelada
-        Finalizada   // Función realizada
+        Pendiente,  
+        Cancelada,   
+        Finalizada   
     }
 }

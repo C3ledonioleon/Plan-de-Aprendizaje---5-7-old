@@ -7,7 +7,6 @@ namespace Proyecto.Services
     public class SectorService : ISectorService
     {
         private readonly ISectorRepository _sectorRepository;
-        private object sector;
 
         public SectorService(ISectorRepository sectorRepository)
         {

@@ -1,50 +1,69 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
+using Proyecto.DTOs;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class ClientesController : ControllerBase
     {
-        private readonly IClienteService clienteService;
+        private readonly IClienteService _clienteService;
 
         public ClientesController(IClienteService clienteService)
         {
-            this.clienteService = clienteService;
+            _clienteService = clienteService;
         }
 
-        // GET /clientes
+        // POST /clientes — Alta de cliente
+        [HttpPost]
+        public IActionResult CrearCliente([FromBody] ClienteCreateDto dto)
+        {
+            var nuevoCliente = new Cliente
+            {
+                DNI = dto.DNI,
+                Nombre = dto.Nombre,
+                Telefono = dto.Telefono
+            };
+
+            var id = _clienteService.AgregarCliente(nuevoCliente);
+            return CreatedAtAction(nameof(ObtenerCliente), new { clienteId = id }, nuevoCliente);
+        }
+
+        // GET /clientes — Lista de clientes
         [HttpGet]
-        public ActionResult<List<Cliente>> GetClientes()
+        public IActionResult ObtenerClientes()
         {
-            return Ok(clienteService.ObtenerTodo());
+            var clientes = _clienteService.ObtenerTodo();
+            return Ok(clientes);
         }
 
-        // GET /clientes/{clienteId}
+        // GET /clientes/{clienteId} — Detalle de cliente
         [HttpGet("{clienteId}")]
-        public ActionResult<Cliente> ObtenerPorId (int clienteId)
+        public IActionResult ObtenerCliente(int clienteId)
         {
-            var cliente = clienteService.ObtenerPorId (clienteId);
-            if (cliente == null) return NotFound();
+            var cliente = _clienteService.ObtenerPorId(clienteId);
+            if (cliente == null)
+                return NotFound();
             return Ok(cliente);
         }
-        // POST /clientes
-        [HttpPut("{clienteId}")]
-        public ActionResult<Cliente> AgregarCliente(Cliente cliente)
-        {
-            int id = clienteService.AgregarCliente(cliente);
-            return CreatedAtAction(nameof(AgregarCliente), new { clienteId = id }, cliente);
-        }
 
-
-        // PUT /clientes/{clienteId}
+        // PUT /clientes/{clienteId} — Actualiza datos
         [HttpPut("{clienteId}")]
-        public ActionResult ActualizarCliente(int Id, Cliente cliente)
+        public IActionResult ActualizarCliente(int clienteId, [FromBody] ClienteCreateDto dto)
         {
-            bool actualizado = clienteService.ActualizarCliente( Id, cliente);
-            if (!actualizado) return NotFound();
+            var clienteExistente = _clienteService.ObtenerPorId(clienteId);
+            if (clienteExistente == null)
+                return NotFound();
+
+            clienteExistente.DNI = dto.DNI;
+            clienteExistente.Nombre = dto.Nombre;
+            clienteExistente.Telefono = dto.Telefono;
+
+            var actualizado = _clienteService.ActualizarCliente(clienteId, clienteExistente);
+            if (!actualizado) return BadRequest();
+
             return NoContent();
         }
     }

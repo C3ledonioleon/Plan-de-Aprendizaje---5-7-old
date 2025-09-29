@@ -9,7 +9,8 @@ namespace Proyecto.Models
         public DateTime FechaFin { get; set; }
         public EstadoEvento Estado { get; set; }
         public List<Funcion>? Funciones { get; set; }
-        Evento()
+        
+        public Evento()
         { }
     }
     public enum EstadoEvento
