@@ -4,10 +4,10 @@ namespace Proyecto.Repositories.Contracts
 {
     public interface IFuncionRepository
     {
-        int Add(Funcion funcion);
-        IEnumerable<Funcion> GetAll();
-        Funcion? GetById(int id);
-        bool Update(Funcion funcion);
-        bool Cancelar(int id);
+            List<Funcion> GetAll();
+            Funcion? GetById(int id);
+            int Add(Funcion funcion);
+            bool Update( int id ,Funcion funcion);
+            bool Delete (int id);
     }
 }

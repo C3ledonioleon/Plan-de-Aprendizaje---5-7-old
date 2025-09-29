@@ -1,60 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api[controller]/[action]")]
     public class TarifasController : ControllerBase
     {
-        private readonly ITarifaRepository _tarifaRepository;
+        private readonly ITarifaService _tarifaService;
 
-        public TarifasController(ITarifaRepository tarifaRepository)
+        public TarifasController(ITarifaService tarifaService)
         {
-            _tarifaRepository = tarifaRepository;
+            _tarifaService = tarifaService;
         }
 
-        // POST /tarifas
-        [HttpPost]
-        public IActionResult Create([FromBody] Tarifa tarifa)
+        // POST /tarifas — Crea una Tarifa
+        [HttpPost("tarifas")]
+        public IActionResult CrearTarifa(Tarifa tarifa)
         {
-            if (tarifa == null) return BadRequest();
-
-            var id = _tarifaRepository.Add(tarifa);
-            return CreatedAtAction(nameof(GetById), new { tarifaId = id }, tarifa);
+            var id = _tarifaService.AgregarTarifa(tarifa);
+            return CreatedAtAction(nameof(ObtenerTarifa), new { tarifaId = id }, tarifa);
         }
 
-        // GET /funciones/{funcionId}/tarifas
-        [HttpGet("/api/funciones/{funcionId}/tarifas")]
-        public IActionResult GetByFuncion(int funcionId)
+        // GET /funciones/{funcionId}/tarifas — Lista tarifas de una función
+        [HttpGet("funciones/{funcionId}/tarifas")]
+        public IActionResult ObtenerTarifas(int funcionId)
         {
-            var tarifas = _tarifaRepository.GetByFuncionId(funcionId);
-            if (tarifas == null || !tarifas.Any()) return NotFound();
-
+            var tarifas = _tarifaService.ObtenerTodo()
+                                        .Where(t => t.IdFuncion == funcionId)
+                                        .ToList();
             return Ok(tarifas);
         }
 
-        // GET /tarifas/{tarifaId}
-        [HttpGet("{tarifaId}")]
-        public IActionResult GetById(int tarifaId)
+        // GET /tarifas/{tarifaId} — Detalle de tarifa
+        [HttpGet("tarifas/{tarifaId}")]
+        public IActionResult ObtenerTarifa(int tarifaId)
         {
-            var tarifa = _tarifaRepository.GetById(tarifaId);
+            var tarifa = _tarifaService.ObtenerPorId(tarifaId);
             if (tarifa == null) return NotFound();
-
             return Ok(tarifa);
         }
 
-        // PUT /tarifas/{tarifaId}
-        [HttpPut("{tarifaId}")]
-        public IActionResult Update(int tarifaId, [FromBody] Tarifa tarifa)
+        // PUT /tarifas/{tarifaId} — Actualiza precio/stock/estado
+        [HttpPut("tarifas/{tarifaId}")]
+        public IActionResult ActualizarTarifa(int tarifaId,Tarifa tarifa)
         {
-            if (tarifa == null || tarifa.IdTarifa != tarifaId) return BadRequest();
-
-            var updated = _tarifaRepository.Update(tarifa);
-            if (!updated) return NotFound();
-
+            var actualizado = _tarifaService.ActualizarTarifa(tarifaId, tarifa);
+            if (!actualizado) return NotFound();
             return NoContent();
         }
     }
 }
+        

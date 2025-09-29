@@ -13,27 +13,27 @@ namespace Proyecto.Services
             _clienteRepository = clienteRepository;
         }
 
-        public List<Cliente> GetAllClientes()
+        public List<Cliente> ObtenerTodo()
         {
             return _clienteRepository.GetAll();
         }
 
-        public Cliente? GetClienteById(int id)
+        public Cliente? ObtenerPorId(int id)
         {
             return _clienteRepository.GetById(id);
         }
 
-        public int CreateCliente(Cliente cliente)
+        public int AgregarCliente(Cliente cliente)
         {
             return _clienteRepository.Add(cliente);
         }
 
-        public bool UpdateCliente(int id, Cliente cliente)
+        public bool ActualizarCliente(int id, Cliente cliente)
         {
             return _clienteRepository.Update(id, cliente);
         }
 
-        public bool DeleteCliente(int id)
+        public bool EliminarCliente(int id)
         {
             return _clienteRepository.Delete(id);
         }

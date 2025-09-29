@@ -4,10 +4,10 @@ namespace Proyecto.Repositories.Contracts
 {
     public interface ILocalRepository
     {
-        int Add(Local local);
-        IEnumerable<Local> GetAll();
+        List<Local> GetAll();
         Local? GetById(int id);
-        bool Update(Local local);
+        int Add(Local local);
+        bool Update(int id, Local local);
         bool Delete(int id);
     }
 }

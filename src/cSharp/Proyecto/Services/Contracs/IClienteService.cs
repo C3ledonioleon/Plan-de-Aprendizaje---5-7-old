@@ -1,13 +1,14 @@
 using Proyecto.Models;
+using System.Collections.Generic;
 
 namespace Proyecto.Services.Contracts
 {
     public interface IClienteService
     {
-        List<Cliente> GetAllClientes();
-        Cliente? GetClienteById(int id);
-        int CreateCliente(Cliente cliente);
-        bool UpdateCliente(int id, Cliente cliente);
-        bool DeleteCliente(int id);
+        List<Cliente> ObtenerTodo();            // Antes: GetAll
+        Cliente? ObtenerPorId(int id);           // Antes: GetById
+        int AgregarCliente(Cliente cliente);     // Antes: Add
+        bool ActualizarCliente(int id, Cliente cliente); // Antes: Update
+        bool EliminarCliente(int id);            // Antes: Delete
     }
 }

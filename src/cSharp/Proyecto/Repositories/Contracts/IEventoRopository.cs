@@ -4,11 +4,10 @@ namespace Proyecto.Repositories.Contracts
 {
     public interface IEventoRepository
     {
-        int Add(Evento evento);
         List<Evento> GetAll();
         Evento? GetById(int id);
-        bool Update(Evento evento);
-        bool Publicar(int id);
-        bool Cancelar(int id);
+        int Add(Evento evento);
+        bool Update(int id, Evento evento);
+        bool Delete(int id);
     }
 }

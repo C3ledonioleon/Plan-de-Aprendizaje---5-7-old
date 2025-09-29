@@ -9,15 +9,10 @@ namespace Proyecto.Models
         public string Nombre { get; set; }
         public string Direccion { get; set; }
         public int CapacidadTotal { get; set; }
-
-        // Constructor opcional con 'this'
-
-        public Local(int idLocal, string nombre, string direccion, int capacidadTotal)
-        {
-            this.IdLocal = idLocal;
-            this.Nombre = nombre;
-            this.Direccion = direccion;
-            this.CapacidadTotal = capacidadTotal;
-        }
+        public List<Sector> Sectores { get; set; } = new();
+        public List<Funcion> Funciones { get; set; } = new();
+        
+        Local()
+        { }
     }
 }

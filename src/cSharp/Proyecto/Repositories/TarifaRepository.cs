@@ -8,51 +8,61 @@ namespace Proyecto.Repositories
 {
     public class TarifaRepository : ITarifaRepository
     {
-        private readonly string _connectionString;
+        private readonly IConfiguration _connectionString;
 
-        public TarifaRepository(string connectionString)
+        // Ahora recibe IConfiguration
+        public TarifaRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connectionString = configuration ;
         }
 
-        private IDbConnection Connection => new MySqlConnection(_connectionString);
+        private IDbConnection GetConnection() => new MySqlConnection(_connectionString.GetConnectionString("DefaultConnection"));
+
+        public List<Tarifa> GetAll()
+        {
+            using var db = GetConnection();
+            return db.Query<Tarifa>("SELECT * FROM Tarifa").ToList();
+        }
+
+        public Tarifa? GetById(int id)
+        {
+            using var db = GetConnection();
+            return db.QueryFirstOrDefault<Tarifa>(
+                "SELECT * FROM Tarifa WHERE IdTarifa = @IdTarifa",
+                new { IdTarifa = id });
+        }
 
         public int Add(Tarifa tarifa)
         {
-            using var db = Connection;
+            using var db = GetConnection();
             string sql = @"
-                INSERT INTO Tarifa (FuncionId, Precio, Stock, Estado)
-                VALUES (@FuncionId, @Precio, @Stock, @Estado);
+                INSERT INTO Tarifa (Precio, Stock, IdSector, IdFuncion)
+                VALUES (@Precio, @Stock, @IdSector, @IdFuncion);
                 SELECT LAST_INSERT_ID();";
-            return db.ExecuteScalar<int>(sql, tarifa);
+            int newId = db.ExecuteScalar<int>(sql, tarifa);
+            tarifa.IdTarifa = newId;
+            return newId;
         }
 
-        public IEnumerable<Tarifa> GetByFuncionId(int funcionId)
+        public bool Update(int id, Tarifa tarifa)
         {
-            using var db = Connection;
-            return db.Query<Tarifa>(
-                "SELECT * FROM Tarifa WHERE FuncionId = @FuncionId",
-                new { FuncionId = funcionId }
-            );
-        }
-
-        public Tarifa GetById(int id)
-        {
-            using var db = Connection;
-            return db.QueryFirstOrDefault<Tarifa>(
-                "SELECT * FROM Tarifa WHERE IdTarifa = @IdTarifa",
-                new { IdTarifa = id }
-            );
-        }
-
-        public bool Update(Tarifa tarifa)
-        {
-            using var db = Connection;
+            using var db = GetConnection();
             string sql = @"
-                UPDATE Tarifa
-                SET Precio = @Precio, Stock = @Stock, Estado = @Estado
+                UPDATE Tarifa 
+                SET Precio = @Precio,
+                    Stock = @Stock,
+                    IdSector = @IdSector,
+                    IdFuncion = @IdFuncion
                 WHERE IdTarifa = @IdTarifa";
-            int rows = db.Execute(sql, tarifa);
+            int rows = db.Execute(sql, new    {tarifa.Precio, tarifa.Stock, tarifa.IdSector, tarifa.IdFuncion, IdTarifa = id});
+            return rows > 0;
+        }
+
+        public bool Delete(int id)
+        {
+            using var db = GetConnection();
+            string sql = "DELETE FROM Tarifa WHERE IdTarifa = @IdTarifa";
+            int rows = db.Execute(sql, new { IdTarifa = id });
             return rows > 0;
         }
     }

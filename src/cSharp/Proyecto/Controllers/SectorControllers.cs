@@ -1,53 +1,56 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
+using System.Linq;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class SectorController : ControllerBase
+    [Route("api[controller]/[action]")]
+    public class SectoresController : ControllerBase
     {
-        private readonly ISectorRepository _repository;
+        private readonly ISectorService _sectorService;
 
-        public SectorController(ISectorRepository repository)
+        public SectoresController(ISectorService sectorService)
         {
-            _repository = repository;
+            _sectorService = sectorService;
         }
 
-        // POST /locales/{localId}/sectores
-        [HttpPost("/locales/{localId}/sectores")]
-        public ActionResult<Sector> CrearSector(int localId, Sector sector)
+        // POST /locales/{idLocal}/sectores
+        [HttpPost("locales/{idLocal}/sectores")]
+        public IActionResult CrearSector(int idLocal, Sector sector)
         {
-            sector.IdLocal = localId;
-            int id = _repository.CrearSector(sector);
-            sector.IdSector = id;
-            return CreatedAtAction(nameof(GetSectoresPorLocal), new { localId = localId }, sector);
+            sector.IdLocal = idLocal;  // ahora usa IdLocal
+            var id = _sectorService.AgregarSector(sector);
+            return CreatedAtAction(nameof(ObtenerSectores), new { idLocal = idLocal }, sector);
         }
 
-        // GET /locales/{localId}/sectores
-        [HttpGet("/locales/{localId}/sectores")]
-        public ActionResult<IEnumerable<Sector>> GetSectoresPorLocal(int localId)
+        // GET /locales/{idLocal}/sectores
+        [HttpGet("locales/{idLocal}/sectores")]
+        public IActionResult ObtenerSectores(int idLocal)
         {
-            var sectores = _repository.ObtenerSectoresPorLocal(localId);
+            var sectores = _sectorService.ObtenerTodo()
+                .Where(s => s.IdLocal == idLocal)  // ahora usa IdLocal
+                .ToList();
             return Ok(sectores);
         }
 
         // PUT /sectores/{sectorId}
-        [HttpPut("{sectorId}")]
+        [HttpPut("sectores/{sectorId}")]
         public IActionResult ActualizarSector(int sectorId, Sector sector)
         {
-            sector.IdSector = sectorId;
-            bool actualizado = _repository.ActualizarSector(sector);
-            return actualizado ? Ok() : NotFound();
+            var actualizado = _sectorService.ActualizarSector(sectorId, sector);
+            if (!actualizado) return NotFound();
+            return NoContent();
         }
 
         // DELETE /sectores/{sectorId}
-        [HttpDelete("{sectorId}")]
+        [HttpDelete("sectores/{sectorId}")]
         public IActionResult EliminarSector(int sectorId)
         {
-            bool eliminado = _repository.EliminarSector(sectorId);
-            return eliminado ? Ok() : BadRequest("No se puede eliminar el sector porque tiene tarifas o funciones asociadas.");
+            var eliminado = _sectorService.EliminarSector(sectorId);
+            if (!eliminado) return NotFound();
+            return NoContent();
         }
     }
 }

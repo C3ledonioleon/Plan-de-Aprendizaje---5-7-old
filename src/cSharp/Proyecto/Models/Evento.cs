@@ -2,12 +2,21 @@ namespace Proyecto.Models
 {
     public class Evento
     {
-        public int IdEvento { get; set; }       
-        public string Nombre { get; set; } = "";
-        public string? Genero { get; set; }
-        public DateTime? FechaInicio { get; set; }
-        public DateTime? FechaFin { get; set; }
-
-        }
+        public int IdEvento { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string? Descripcion { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public EstadoEvento Estado { get; set; }
+        public List<Funcion>? Funciones { get; set; }
+        Evento()
+        { }
+    }
+    public enum EstadoEvento
+    {
+        Inactivo,
+        Publicado,
+        Cancelado
     }
 
+}

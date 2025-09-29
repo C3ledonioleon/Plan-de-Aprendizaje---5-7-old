@@ -6,6 +6,8 @@ namespace Proyecto.Repositories.Contracts
     {
         List<Entrada> GetAll();
         Entrada? GetById(int id);
-        bool Anular(int id);
+        int Add(Entrada entrada); 
+        bool Update(int id, Entrada entrada);
+        bool Delete(int id);
     }
 }

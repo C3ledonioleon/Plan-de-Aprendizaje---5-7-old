@@ -1,62 +1,78 @@
+using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
-using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace Proyecto.Repositories
 {
     public class FuncionRepository : IFuncionRepository
     {
-        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public FuncionRepository(string connectionString)
+        public FuncionRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
-        private IDbConnection Connection => new MySqlConnection(_connectionString);
+        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-        public int Add(Funcion funcion)
+        public List<Funcion> GetAll()
         {
             using var db = Connection;
-            string sql = @"
-                INSERT INTO Funcion (Fecha, IdEvento, IdLocal, Cancelada)
-                VALUES (@Fecha, @IdEvento, @IdLocal, @Cancelada);
-                SELECT LAST_INSERT_ID();";
-            return db.ExecuteScalar<int>(sql, funcion);
-        }
-
-        public IEnumerable<Funcion> GetAll()
-        {
-            using var db = Connection;
-            string sql = "SELECT * FROM Funcion";
-            return db.Query<Funcion>(sql);
+            return db.Query<Funcion>("SELECT * FROM Funcion").ToList();
         }
 
         public Funcion? GetById(int id)
         {
             using var db = Connection;
-            string sql = "SELECT * FROM Funcion WHERE IdFuncion = @Id";
-            return db.QueryFirstOrDefault<Funcion>(sql, new { Id = id });
+            return db.QueryFirstOrDefault<Funcion>(
+                "SELECT * FROM Funcion WHERE IdFuncion = @IdFuncion",
+                new { IdFuncion = id });
         }
 
-        public bool Update(Funcion funcion)
+        public int Add(Funcion funcion)
         {
             using var db = Connection;
             string sql = @"
-                UPDATE Funcion
-                SET Fecha = @Fecha, IdEvento = @IdEvento, IdLocal = @IdLocal
+                INSERT INTO Funcion (FechaHora, IdEvento, IdLocal, Estado)
+                VALUES (@FechaHora, @IdEvento, @IdLocal, @Estado);
+                SELECT LAST_INSERT_ID();";
+
+            int newId = db.ExecuteScalar<int>(sql, funcion);
+            funcion.IdFuncion = newId;
+            return newId;
+        }
+
+        public bool Update(int id, Funcion funcion)
+        {
+            using var db = Connection;
+            string sql = @"
+                UPDATE Funcion 
+                SET FechaHora = @FechaHora,
+                    IdLocal = @IdLocal,
+                    IdEvento = @IdEvento,
+                    Estado = @Estado
                 WHERE IdFuncion = @IdFuncion";
-            int rows = db.Execute(sql, funcion);
+
+            int rows = db.Execute(sql, new { funcion.FechaHora, funcion.IdLocal, funcion.IdEvento, funcion.Estado, IdFuncion = id });
             return rows > 0;
         }
 
-        public bool Cancelar(int id)
+        public bool Delete(int id)
         {
             using var db = Connection;
-            string sql = "UPDATE Funcion SET Cancelada = 1 WHERE IdFuncion = @Id";
-            int rows = db.Execute(sql, new { Id = id });
+
+            // Verificar si la función tiene entradas vendidas
+            string checkSql = "SELECT COUNT(*) FROM Entrada WHERE IdFuncion = @IdFuncion";
+            int count = db.ExecuteScalar<int>(checkSql, new { IdFuncion = id });
+
+            if (count > 0)
+                return false;
+
+            string deleteSql = "DELETE FROM Funcion WHERE IdFuncion = @IdFuncion";
+            int rows = db.Execute(deleteSql, new { IdFuncion = id });
             return rows > 0;
         }
     }

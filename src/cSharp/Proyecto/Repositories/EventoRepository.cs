@@ -1,7 +1,7 @@
-using Proyecto.Models;
-using Dapper;
 using System.Data;
+using Dapper;
 using MySql.Data.MySqlClient;
+using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 
 namespace Proyecto.Repositories
@@ -15,22 +15,9 @@ namespace Proyecto.Repositories
             _configuration = configuration;
         }
 
-        private IDbConnection Connection => new MySqlConnection(
-            _configuration.GetConnectionString("DefaultConnection")
-        );
+        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-        public int Add(Evento evento)
-        {
-            using var db = Connection;
-            string sql = @"
-                INSERT INTO Evento (Nombre, Genero, FechaInicio, FechaFin)
-                VALUES (@Nombre, @Genero, @FechaInicio, @FechaFin);
-                SELECT LAST_INSERT_ID();";
 
-            int newId = db.ExecuteScalar<int>(sql, evento);
-            evento.IdEvento = newId;
-            return newId;
-        }
 
         public List<Evento> GetAll()
         {
@@ -43,39 +30,42 @@ namespace Proyecto.Repositories
             using var db = Connection;
             return db.QueryFirstOrDefault<Evento>(
                 "SELECT * FROM Evento WHERE IdEvento = @IdEvento",
-                new { IdEvento = id }
-            );
+                new { IdEvento = id });
         }
-
-        public bool Update(Evento evento)
+        public int Add(Evento evento)
         {
             using var db = Connection;
             string sql = @"
-                UPDATE Evento
+                INSERT INTO Evento (Nombre, Genero, FechaInicio, FechaFin,Estado)
+                VALUES (@Nombre, @Genero, @FechaInicio, @FechaFin ,@Estado);
+                SELECT LAST_INSERT_ID();";
+
+            int newId = db.ExecuteScalar<int>(sql, evento);
+            evento.IdEvento = newId;
+            return newId;
+        }
+        public bool Update(int id, Evento evento)
+        {
+            using var db = Connection;
+            string sql = @"
+                UPDATE Evento 
                 SET Nombre = @Nombre,
-                    Genero = @Genero,
-                    FechaInicio = @FechaInicio,
-                    FechaFin = @FechaFin
+                Descripcion = @Decripcion,
+                FechaInicio = @FechaInicio,
+                FechaFin = @FechaFin,
+                Estado = @Estado
                 WHERE IdEvento = @IdEvento";
-
-            int rows = db.Execute(sql, evento);
+            int rows = db.Execute(sql, new { evento.Nombre, evento.Descripcion, evento.FechaInicio, evento.FechaFin, evento.Estado , IdEvento = id });
             return rows > 0;
         }
-
-        public bool Publicar(int id)
+        
+        public bool Delete(int id)
         {
             using var db = Connection;
-            string sql = "UPDATE Evento SET Estado = 'Publicado' WHERE IdEvento = @IdEvento";
+            string sql = "DELETE FROM Evento WHERE IdEvento = @IdEvento";
             int rows = db.Execute(sql, new { IdEvento = id });
             return rows > 0;
         }
 
-        public bool Cancelar(int id)
-        {
-            using var db = Connection;
-            string sql = "UPDATE Evento SET Estado = 'Cancelado' WHERE IdEvento = @IdEvento";
-            int rows = db.Execute(sql, new { IdEvento = id });
-            return rows > 0;
-        }
     }
 }

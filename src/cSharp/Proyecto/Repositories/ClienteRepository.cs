@@ -36,8 +36,8 @@ namespace Proyecto.Repositories
         {
             using var db = Connection;
             string sql = @"
-                INSERT INTO Cliente (Nombre, DNI, Email, Telefono)
-                VALUES (@Nombre, @DNI, @Email, @Telefono);
+                INSERT INTO Cliente (Nombre, DNI, Telefono)
+                VALUES (@Nombre, @DNI, @Telefono);
                 SELECT LAST_INSERT_ID();";
             int newId = db.ExecuteScalar<int>(sql, cliente);
             cliente.IdCliente = newId;
@@ -49,9 +49,11 @@ namespace Proyecto.Repositories
             using var db = Connection;
             string sql = @"
                 UPDATE Cliente 
-                SET Nombre = @Nombre, DNI = @DNI, Email = @Email, Telefono = @Telefono
+                SET Nombre = @Nombre,
+                DNI = @DNI,
+                Telefono = @Telefono
                 WHERE IdCliente = @IdCliente";
-            int rows = db.Execute(sql, new { cliente.Nombre, cliente.DNI, cliente.Email, cliente.Telefono, IdCliente = id });
+            int rows = db.Execute(sql, new { cliente.Nombre, cliente.DNI, cliente.Telefono, IdCliente = id });
             return rows > 0;
         }
 
@@ -61,16 +63,6 @@ namespace Proyecto.Repositories
             string sql = "DELETE FROM Cliente WHERE IdCliente = @IdCliente";
             int rows = db.Execute(sql, new { IdCliente = id });
             return rows > 0;
-        }
-
-        List<Cliente> IClienteRepository.GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        Cliente? IClienteRepository.GetById(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

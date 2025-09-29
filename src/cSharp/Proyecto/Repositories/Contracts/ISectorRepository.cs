@@ -4,9 +4,10 @@ namespace Proyecto.Repositories.Contracts
 {
     public interface ISectorRepository
     {
-        int CrearSector(Sector sector);
-        IEnumerable<Sector> ObtenerSectoresPorLocal(int localId);
-        bool ActualizarSector(Sector sector);
-        bool EliminarSector(int sectorId);
+        List<Sector> GetAll();
+        Sector? GetById(int id);    
+        int Add(Sector sector);
+        bool  Update (int id,Sector sector);
+        bool Delete (int sectorId);
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 namespace Proyecto.Controllers
 {
@@ -8,36 +8,47 @@ namespace Proyecto.Controllers
     [Route("api/[controller]/[action]")]
     public class EntradasController : ControllerBase
     {
-        private readonly IEntradaRepository _repo;
+        private readonly IEntradaService _entradaService;
 
-        public EntradasController(IEntradaRepository repo)
+        public EntradasController(IEntradaService entradaService)
         {
-            _repo = repo;
+            _entradaService = entradaService;
         }
 
-        // GET /entradas
+        // GET /api/entradas
         [HttpGet]
-        public ActionResult<List<Entrada>> GetEntradas()
+        public ActionResult<List<Entrada>> ObtenerEntradas()
         {
-            return Ok(_repo.GetAll());
+            var entradas = _entradaService.ObtenerTodo();
+            return Ok(entradas);
         }
 
-        // GET /entradas/{entradaId}
+        // GET /api/entradas/{entradaId}
         [HttpGet("{entradaId}")]
-        public ActionResult<Entrada> GetEntrada(int entradaId)
+        public ActionResult<Entrada> ObtenerEntradaPorId(int entradaId)
         {
-            var entrada = _repo.GetById(entradaId);
-            if (entrada == null) return NotFound();
+            var entrada = _entradaService.ObtenerPorId(entradaId);
+            if (entrada == null)
+                return NotFound($"No se encontró la entrada con ID {entradaId}");
+
             return Ok(entrada);
         }
 
-        // POST /entradas/{entradaId}/anular
+        // POST /api/entradas/{entradaId}/anular
         [HttpPost("{entradaId}/anular")]
         public ActionResult AnularEntrada(int entradaId)
         {
-            bool exito = _repo.Anular(entradaId);
-            if (!exito) return NotFound();
-            return NoContent();
+            var entrada = _entradaService.ObtenerPorId(entradaId);
+            if (entrada == null)
+                return NotFound($"No se encontró la entrada con ID {entradaId}");
+                
+            entrada.Estado = EstadoEntrada.Anulada; 
+            var actualizado = _entradaService.ActualizarEntrada(entradaId, entrada);
+
+            if (!actualizado)
+                return StatusCode(500, "No se pudo anular la entrada.");
+
+            return Ok($"La entrada con ID {entradaId} fue anulada correctamente.");
         }
     }
 }

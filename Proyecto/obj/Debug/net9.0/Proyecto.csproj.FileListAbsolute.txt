@@ -1,9 +1,0 @@
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.csproj.AssemblyReference.cache
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\rpswa.dswa.cache.json
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.AssemblyInfoInputs.cache
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.AssemblyInfo.cs
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.csproj.CoreCompileInputs.cache
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\Proyecto\obj\Debug\net9.0\Proyecto.sourcelink.json

@@ -1,81 +1,69 @@
+using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
-using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace Proyecto.Repositories
 {
     public class OrdenRepository : IOrdenRepository
     {
-        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public OrdenRepository(string connectionString)
+        public OrdenRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
-        private IDbConnection Connection => new MySqlConnection(_connectionString);
-
-        public int Add(Orden orden)
-        {
-            using var db = Connection;
-            string sql = @"
-                INSERT INTO Orden (FechaOrden, IdCliente)
-                VALUES (@FechaOrden, @IdCliente);
-                SELECT LAST_INSERT_ID();";
-            return db.ExecuteScalar<int>(sql, orden);
-        }
+        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
         public List<Orden> GetAll()
         {
             using var db = Connection;
-            string sql = "SELECT * FROM Orden";
-            return db.Query<Orden>(sql).AsList();
+            return db.Query<Orden>("SELECT * FROM Orden").ToList();
         }
 
         public Orden? GetById(int id)
         {
             using var db = Connection;
-            string sql = "SELECT * FROM Orden WHERE IdOrden = @Id";
-            return db.QueryFirstOrDefault<Orden>(sql, new { Id = id });
+            return db.QueryFirstOrDefault<Orden>(
+                "SELECT * FROM Orden WHERE IdOrden = @IdOrden",
+                new { IdOrden = id });
         }
 
-        public void Pagar(int id, List<Entrada> entradas)
+        public int Add(Orden orden)
         {
             using var db = Connection;
-            using var tran = db.BeginTransaction();
-
-            try
-            {
-                // Marcar orden como pagada
-                string sqlOrden = "UPDATE Orden SET Pagada = 1 WHERE IdOrden = @Id";
-                db.Execute(sqlOrden, new { Id = id }, tran);
-
-                // Insertar entradas asociadas
-                foreach (var entrada in entradas)
-                {
-                    entrada.IdOrden = id;
-                    string sqlEntrada = @"
-                        INSERT INTO Entrada (Precio, IdOrden, IdTarifa)
-                        VALUES (@Precio, @IdOrden, @IdTarifa)";
-                    db.Execute(sqlEntrada, entrada, tran);
-                }
-
-                tran.Commit();
-            }
-            catch
-            {
-                tran.Rollback();
-                throw;
-            }
+            string sql = @"
+                INSERT INTO Orden (Total, Fecha, IdCliente, IdTarifa, Estado)
+                VALUES (@Total, @Fecha, @IdCliente, @IdTarifa, @Estado);
+                SELECT LAST_INSERT_ID();";
+            int newId = db.ExecuteScalar<int>(sql, orden);
+            orden.IdOrden = newId;
+            return newId;
         }
 
-        public bool Cancelar(int id)
+        public bool Update(int id, Orden orden)
         {
             using var db = Connection;
-            string sql = "UPDATE Orden SET Cancelada = 1 WHERE IdOrden = @Id";
-            int rows = db.Execute(sql, new { Id = id });
+            string sql = @"
+                UPDATE Orden 
+                SET Total = @Total, 
+                    Fecha = @Fecha,
+                    Estado = @Estado,
+                    IdCliente = @IdCliente,
+                    IdTarifa = @IdTarifa
+                WHERE IdOrden = @IdOrden";
+            int rows = db.Execute(sql, new { orden.Total, orden.Fecha, orden.Estado, orden.IdCliente, orden.IdTarifa, IdOrden = id });
+            return rows > 0;
+        }
+
+        public bool Delete(int id)
+        {
+            using var db = Connection;
+            string sql = "DELETE FROM Orden WHERE IdOrden = @IdOrden";
+            int rows = db.Execute(sql, new { IdOrden = id });
             return rows > 0;
         }
     }

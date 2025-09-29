@@ -3,9 +3,21 @@ namespace Proyecto.Models
     public class Tarifa
     {
         public int IdTarifa { get; set; }
-        public string? MedioPago { get; set; }
-        public int Stock { get; set; }
-        public int IdSector { get; set; }
         public int IdFuncion { get; set; }
+        public int IdSector { get; set; }
+        public decimal Precio { get; set; }
+        public int Stock { get; set; }
+        public Funcion? Funcion { get; set; }
+        public Sector? Sector { get; set; }
+        public EstadoTarifa Estado { get; set; }
+        public List<Entrada> Entradas { get; set; } 
+        Tarifa()
+        { }
+    }
+
+    public enum EstadoTarifa
+    {
+        Activa,
+        Inactiva
     }
 }

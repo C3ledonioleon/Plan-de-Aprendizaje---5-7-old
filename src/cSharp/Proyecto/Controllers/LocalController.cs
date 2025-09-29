@@ -1,54 +1,61 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class LocalController : ControllerBase
+    public class LocalesController : ControllerBase
     {
-        private readonly ILocalRepository _repo;
+        private readonly ILocalService _localService;
 
-        public LocalController(ILocalRepository repo)
+        public LocalesController(ILocalService localService)
         {
-            _repo = repo;
+            _localService = localService;
         }
 
+        // POST /locales — Crea un Local
         [HttpPost]
-        public IActionResult CrearLocal(Local local)
+        public IActionResult CrearLocal([FromBody] Local local)
         {
-            int id = _repo.Add(local);
-            return CreatedAtAction(nameof(GetById), new { id = id }, local);
+            var id = _localService.AgregarLocal(local);
+            return CreatedAtAction(nameof(ObtenerLocal), new { localId = id }, local);
         }
 
+        // GET /locales — Lista de locales
         [HttpGet]
-        public ActionResult<IEnumerable<Local>> GetAll()
+        public IActionResult ObtenerLocales()
         {
-            return Ok(_repo.GetAll());
+            var locales = _localService.ObtenerTodo();
+            return Ok(locales);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Local> GetById(int id)
+        // GET /locales/{localId} — Detalle de un local
+        [HttpGet("{localId}")]
+        public IActionResult ObtenerLocal(int localId)
         {
-            var local = _repo.GetById(id);
+            var local = _localService.ObtenerPorId(localId);
             if (local == null) return NotFound();
             return Ok(local);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult ActualizarLocal(int id, Local local)
+        // PUT /locales/{localId} — Actualiza datos del local
+        [HttpPut("{localId}")]
+        public IActionResult ActualizarLocal(int localId, [FromBody] Local local)
         {
-            local.IdLocal = id;
-            bool actualizado = _repo.Update(local);
-            return actualizado ? Ok() : NotFound();
+            var actualizado = _localService.ActualizarLocal(localId, local);
+            if (!actualizado) return NotFound();
+            return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult EliminarLocal(int id)
+        // DELETE /locales/{localId} — Elimina un local (si no tiene funciones vigentes)
+        [HttpDelete("{localId}")]
+        public IActionResult EliminarLocal(int localId)
         {
-            bool eliminado = _repo.Delete(id);
-            return eliminado ? Ok() : BadRequest("El local tiene funciones vigentes y no se puede eliminar.");
+            var eliminado = _localService.EliminarLocal(localId);
+            if (!eliminado) return NotFound();
+            return NoContent();
         }
     }
 }

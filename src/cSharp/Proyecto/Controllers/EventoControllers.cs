@@ -1,70 +1,85 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class EventoController : ControllerBase
+    public class EventosController : ControllerBase
     {
-        private readonly IEventoRepository _repo;
+        private readonly IEventoService _eventoService;
 
-        public EventoController(IEventoRepository repo)
+        public EventosController(IEventoService eventoService)
         {
-            _repo = repo;
+            _eventoService = eventoService;
         }
 
-        // POST /eventos
+        // POST /eventos — Crea un Evento
         [HttpPost]
-        public IActionResult CrearEvento(Evento evento)
+        public IActionResult CrearEvento([FromBody] Evento evento)
         {
-            int id = _repo.Add(evento);
-            return CreatedAtAction(nameof(DetalleEvento), new { eventoId = id }, evento);
+            var id = _eventoService.AgregarEvento(evento);
+            return CreatedAtAction(nameof(ObtenerEvento), new { eventoId = id }, evento);
         }
 
-        // GET /eventos
+        // GET /eventos — Lista eventos
         [HttpGet]
-        public ActionResult<List<Evento>> ListarEventos()
+        public IActionResult ObtenerEventos()
         {
-            return Ok(_repo.GetAll());
+            var eventos = _eventoService.ObtenerTodo();
+            return Ok(eventos);
         }
 
-        // GET /eventos/{eventoId}
+        // GET /eventos/{eventoId} — Detalle de un evento
         [HttpGet("{eventoId}")]
-        public ActionResult<Evento> DetalleEvento(int eventoId)
+        public IActionResult ObtenerEvento(int eventoId)
         {
-            var evento = _repo.GetById(eventoId);
+            var evento = _eventoService.ObtenerPorId(eventoId);
             if (evento == null) return NotFound();
             return Ok(evento);
         }
 
-        // PUT /eventos/{eventoId}
+        // PUT /eventos/{eventoId} — Actualiza datos del evento
         [HttpPut("{eventoId}")]
-        public IActionResult ActualizarEvento(int eventoId, Evento evento)
+        public IActionResult ActualizarEvento(int eventoId, [FromBody] Evento evento)
         {
-            evento.IdEvento = eventoId;
-            bool actualizado = _repo.Update(evento);
+            var actualizado = _eventoService.ActualizarEvento(eventoId, evento);
             if (!actualizado) return NotFound();
-            return Ok(evento);
+            return NoContent();
         }
 
-        // POST /eventos/{eventoId}/publicar
+        // DELETE /eventos/{eventoId} — Elimina un evento
+        [HttpDelete("{eventoId}")]
+        public IActionResult EliminarEvento(int eventoId)
+        {
+            var eliminado = _eventoService.EliminarEvento(eventoId);
+            if (!eliminado) return NotFound();
+            return NoContent();
+        }
+
+        // POST /eventos/{eventoId}/publicar — Publica un evento
         [HttpPost("{eventoId}/publicar")]
         public IActionResult PublicarEvento(int eventoId)
         {
-            bool publicado = _repo.Publicar(eventoId);
+            var publicado = _eventoService.Publicar(eventoId);
             if (!publicado) return NotFound();
-            return Ok(new { mensaje = "Evento publicado" });
+            return Ok(new { mensaje = "Evento publicado correctamente" });
         }
 
-        // POST /eventos/{eventoId}/cancelar
+        // POST /eventos/{eventoId}/cancelar — Cancela un evento
         [HttpPost("{eventoId}/cancelar")]
         public IActionResult CancelarEvento(int eventoId)
         {
-            bool cancelado = _repo.Cancelar(eventoId);
-            if (!cancelado) return NotFound();
-            return Ok(new { mensaje = "Evento cancelado" });
+            // 👇 No existe Cancelar en tu interfaz, pero podés implementarlo reutilizando ActualizarEvento
+            var evento = _eventoService.ObtenerPorId(eventoId);
+            if (evento == null) return NotFound();
+
+            evento.Estado = EstadoEvento.Cancelado; // suponiendo que tenés un campo Estado
+            var actualizado = _eventoService.ActualizarEvento(eventoId, evento);
+
+            if (!actualizado) return BadRequest();
+            return Ok(new { mensaje = "Evento cancelado correctamente" });
         }
     }
 }

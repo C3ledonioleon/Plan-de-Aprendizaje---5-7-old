@@ -1,62 +1,66 @@
+using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
+using Microsoft.Extensions.Configuration;
 
 namespace Proyecto.Repositories
 {
     public class SectorRepository : ISectorRepository
     {
-        private readonly string _connectionString;
+        private readonly IConfiguration _configuration;
 
-        public SectorRepository(string connectionString)
+        public SectorRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
-        private MySqlConnection GetConnection() => new(_connectionString);
+        private IDbConnection Connection => new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-        public int CrearSector(Sector sector)
+        public List<Sector> GetAll()
         {
-            using var connection = GetConnection();
+            using var db = Connection;
+            return db.Query<Sector>("SELECT * FROM Sector").ToList();
+        }
+
+        public Sector? GetById(int id)
+        {
+            using var db = Connection;
+            return db.QueryFirstOrDefault<Sector>(
+                "SELECT * FROM Sector WHERE IdSector = @IdSector",
+                new { IdSector = id });
+        }
+
+        public int Add(Sector sector)
+        {
+            using var db = Connection;
             string sql = @"
-                INSERT INTO Sector (Nombre, Capacidad, IdLocal) 
+                INSERT INTO Sector (Nombre, Capacidad, IdLocal)
                 VALUES (@Nombre, @Capacidad, @IdLocal);
                 SELECT LAST_INSERT_ID();";
-            return connection.ExecuteScalar<int>(sql, sector);
+            int newId = db.ExecuteScalar<int>(sql, sector);
+            sector.IdSector = newId;
+            return newId;
         }
 
-        public IEnumerable<Sector> ObtenerSectoresPorLocal(int localId)
+        public bool Update(int id, Sector sector)
         {
-            using var connection = GetConnection();
-            string sql = "SELECT * FROM Sector WHERE IdLocal = @LocalId";
-            return connection.Query<Sector>(sql, new { LocalId = localId });
-        }
-
-        public bool ActualizarSector(Sector sector)
-        {
-            using var connection = GetConnection();
+            using var db = Connection;
             string sql = @"
                 UPDATE Sector 
-                SET Nombre = @Nombre, Capacidad = @Capacidad 
+                SET Nombre = @Nombre, Capacidad = @Capacidad, IdLocal = @IdLocal
                 WHERE IdSector = @IdSector";
-            int filas = connection.Execute(sql, sector);
-            return filas > 0;
+            int rows = db.Execute(sql, new { sector.Nombre, sector.Capacidad, sector.IdLocal, IdSector = id });
+            return rows > 0;
         }
 
-        public bool EliminarSector(int sectorId)
+        public bool Delete(int id)
         {
-            using var connection = GetConnection();
-
-            // Validación: verificar que no tenga tarifas asociadas
-            string checkSql = "SELECT COUNT(*) FROM Tarifa WHERE IdSector = @SectorId";
-            int countTarifas = connection.ExecuteScalar<int>(checkSql, new { SectorId = sectorId });
-
-            if (countTarifas > 0) return false;
-
-            string sql = "DELETE FROM Sector WHERE IdSector = @SectorId";
-            int filas = connection.Execute(sql, new { SectorId = sectorId });
-            return filas > 0;
+            using var db = Connection;
+            string sql = "DELETE FROM Sector WHERE IdSector = @IdSector";
+            int rows = db.Execute(sql, new { IdSector = id });
+            return rows > 0;
         }
     }
 }

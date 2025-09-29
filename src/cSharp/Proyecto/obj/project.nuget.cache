@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "b4Gshbg8JxQ=",
+  "dgSpecHash": "Qmx2y3HRWgU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Celedonio\\Desktop\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
+  "projectFilePath": "C:\\Users\\Celedonio\\Documents\\GitHub\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Celedonio\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\Celedonio\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",

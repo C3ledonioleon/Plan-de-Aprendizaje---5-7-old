@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Repositories.Contracts;
 
 namespace Proyecto.Controllers
 {
@@ -8,52 +7,68 @@ namespace Proyecto.Controllers
     [Route("api/[controller]/[action]")]
     public class FuncionesController : ControllerBase
     {
-        private readonly IFuncionRepository _repo;
+        private readonly IFuncionService _funcionService;
 
-        public FuncionesController(IFuncionRepository repo)
+        public FuncionesController(IFuncionService funcionService)
         {
-            _repo = repo;
+            _funcionService = funcionService;
         }
 
-        // POST /funciones
+        // POST /funciones — Crea una Función
         [HttpPost]
-        public ActionResult<int> CrearFuncion(Funcion funcion)
+        public IActionResult CrearFuncion([FromBody] Funcion funcion)
         {
-            int id = _repo.Add(funcion);
-            return CreatedAtAction(nameof(DetalleFuncion), new { funcionId = id }, new { Id = id });
+            var id = _funcionService.AgregarFuncion(funcion);
+            return CreatedAtAction(nameof(ObtenerFuncion), new { funcionId = id }, funcion);
         }
 
-        // GET /funciones
+        // GET /funciones — Lista funciones
         [HttpGet]
-        public ActionResult<IEnumerable<Funcion>> ListarFunciones()
+        public IActionResult ObtenerFunciones()
         {
-            return Ok(_repo.GetAll());
+            var funciones = _funcionService.ObtenerTodo();
+            return Ok(funciones);
         }
 
-        // GET /funciones/{funcionId}
+        // GET /funciones/{funcionId} — Detalle de función
         [HttpGet("{funcionId}")]
-        public ActionResult<Funcion> DetalleFuncion(int funcionId)
+        public IActionResult ObtenerFuncion(int funcionId)
         {
-            var funcion = _repo.GetById(funcionId);
+            var funcion = _funcionService.ObtenerPorId(funcionId);
             if (funcion == null) return NotFound();
             return Ok(funcion);
         }
 
-        // PUT /funciones/{funcionId}
+        // PUT /funciones/{funcionId} — Actualiza función
         [HttpPut("{funcionId}")]
-        public ActionResult ActualizarFuncion(int funcionId, Funcion funcion)
+        public IActionResult ActualizarFuncion(int funcionId, [FromBody] Funcion funcion)
         {
-            funcion.IdFuncion = funcionId;
-            bool actualizado = _repo.Update(funcion);
-            return actualizado ? Ok() : NotFound();
+            var actualizado = _funcionService.ActualizarFuncion(funcionId, funcion);
+            if (!actualizado) return NotFound();
+            return NoContent();
         }
 
-        // POST /funciones/{funcionId}/cancelar
-        [HttpPost("{funcionId}/cancelar")]
-        public ActionResult CancelarFuncion(int funcionId)
+        // DELETE /funciones/{funcionId} — Elimina función
+        [HttpDelete("{funcionId}")]
+        public IActionResult EliminarFuncion(int funcionId)
         {
-            bool cancelado = _repo.Cancelar(funcionId);
-            return cancelado ? Ok("Función cancelada") : NotFound();
+            var eliminado = _funcionService.EliminarFuncion(funcionId);
+            if (!eliminado) return NotFound();
+            return NoContent();
+        }
+
+        // POST /funciones/{funcionId}/cancelar — Cancela la función
+        [HttpPost("{funcionId}/cancelar")]
+        public IActionResult CancelarFuncion(int funcionId)
+        {
+            var funcion = _funcionService.ObtenerPorId(funcionId);
+            if (funcion == null) return NotFound();
+
+            funcion.Estado = EstadoFuncion.Cancelada; // suponiendo que el modelo tiene un campo Estado
+            var actualizado = _funcionService.ActualizarFuncion(funcionId, funcion);
+
+            if (!actualizado) return BadRequest();
+            return Ok(new { mensaje = "Función cancelada correctamente" });
         }
     }
 }
