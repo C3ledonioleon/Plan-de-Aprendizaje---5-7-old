@@ -2079,23 +2079,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Celedonio\\.nuget\\packages\\": {},
+    "C:\\Users\\Lab20-PC02\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Celedonio\\Documents\\GitHub\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
+      "projectUniqueName": "C:\\Users\\Lab20-PC02\\Downloads\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
       "projectName": "Proyecto",
-      "projectPath": "C:\\Users\\Celedonio\\Documents\\GitHub\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
-      "packagesPath": "C:\\Users\\Celedonio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Celedonio\\Documents\\GitHub\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\obj\\",
+      "projectPath": "C:\\Users\\Lab20-PC02\\Downloads\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\Proyecto.csproj",
+      "packagesPath": "C:\\Users\\Lab20-PC02\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lab20-PC02\\Downloads\\Plan-de-Aprendizaje---5-7\\src\\cSharp\\Proyecto\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Celedonio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lab20-PC02\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2168,7 +2168,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
