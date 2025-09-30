@@ -1,5 +1,7 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 public class OrdenService : IOrdenService
 {
@@ -19,9 +21,19 @@ public class OrdenService : IOrdenService
     {
         return _ordenRepository.GetById(id);
     }
-    public int AgregarOrden (Orden orden)
+    // Ahora recibe el DTO directamente
+    public int AgregarOrden(OrdenCreateDto orden)
     {
-        return _ordenRepository.Add(orden);
+        var nuevaOrden = new Orden
+        {
+            IdCliente = orden.IdCliente,
+            IdTarifa = orden.IdTarifa,
+            Total = orden.Total,
+            Fecha = DateTime.Now,
+            Estado = EstadoOrden.Creada
+        };
+
+        return _ordenRepository.Add(nuevaOrden);
     }
 
     public bool ActualizarOrden (int id, Orden orden)

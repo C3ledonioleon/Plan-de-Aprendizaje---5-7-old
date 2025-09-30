@@ -1,4 +1,6 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
+using System.Collections.Generic;
 
 namespace Proyecto.Services.Contracts
 {
@@ -6,7 +8,7 @@ namespace Proyecto.Services.Contracts
     {
         List<Entrada> ObtenerTodo();
         Entrada? ObtenerPorId(int id);
-        int AgregarEntrada(Entrada entrada);
+        int AgregarEntrada(EntradaCreateDto entrada);
         bool ActualizarEntrada (int id, Entrada entrada);
         bool EliminarEntrada(int id);
     }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
+using Proyecto.DTOs;
 
 namespace Proyecto.Controllers
 {
@@ -16,10 +17,10 @@ namespace Proyecto.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearOrden(Orden orden)
+        public IActionResult CrearOrden([FromBody] OrdenCreateDto dto)
         {
-            var id = _ordenService.AgregarOrden(orden);
-            return CreatedAtAction(nameof(ObtenerOrden), new { ordenId = id }, orden);
+            var id = _ordenService.AgregarOrden( dto );
+            return CreatedAtAction(nameof(ObtenerOrden), new { ordenId = id },  dto);
         }
 
   

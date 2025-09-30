@@ -1,3 +1,4 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
@@ -22,9 +23,17 @@ namespace Proyecto.Services
         {
             return _eventoRepository.GetById(id);
         }
-        public int AgregarEvento(Evento evento)
+        public int AgregarEvento(EventoCreateDto evento)
         {
-            return _eventoRepository.Add(evento);
+        var  nuevoEvento = new Evento
+        {
+            Nombre = evento.Nombre,
+            Descripcion = evento.Descripcion,
+            FechaInicio = evento.FechaInicio,
+            FechaFin = evento.FechaFin,
+            Estado = EstadoEvento.Inactivo
+        };
+            return _eventoRepository.Add( nuevoEvento );
         }
 
         public bool ActualizarEvento(int id, Evento evento)

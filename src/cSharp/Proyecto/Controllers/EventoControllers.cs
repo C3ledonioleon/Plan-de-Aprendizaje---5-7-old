@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
-
+using Proyecto.DTOs;
 namespace Proyecto.Controllers
 {
     [ApiController]
@@ -17,10 +17,10 @@ namespace Proyecto.Controllers
 
         // POST /eventos — Crea un Evento
         [HttpPost]
-        public IActionResult CrearEvento([FromBody] Evento evento)
+        public IActionResult CrearEvento([FromBody] EventoCreateDto dto)
         {
-            var id = _eventoService.AgregarEvento(evento);
-            return CreatedAtAction(nameof(ObtenerEvento), new { eventoId = id }, evento);
+            var id = _eventoService.AgregarEvento(dto);
+            return CreatedAtAction(nameof(ObtenerEvento), new { eventoId = id }, dto);
         }
 
         // GET /eventos — Lista eventos

@@ -3,6 +3,7 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
+using Proyecto.Services;
 
 namespace Proyecto.Repositories
 {

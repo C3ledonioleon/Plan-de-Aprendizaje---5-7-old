@@ -20,9 +20,16 @@ public class FuncionService : IFuncionService
         return _funcionRepository.GetById(id);
     }
 
-    public int AgregarFuncion (Funcion funcion)
+    public int AgregarFuncion (FucionCreateDto fucion)
     {
-        return _funcionRepository.Add(funcion);
+            var nuevaEntrada = new Funcion
+            {
+                Precio = funcion.Precio,
+                IdOrden = funcion.IdOrden,
+                IdTarifa = funcion.IdTarifa,
+                Estado = EstadoEntrada.Activa
+            };
+            return _entradaRepository.Add( nuevaEntrada);
     }
 
     public bool ActualizarFuncion (int id, Funcion funcion)
