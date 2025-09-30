@@ -20,15 +20,9 @@ namespace Proyecto.Controllers
         [HttpPost]
         public IActionResult CrearCliente([FromBody] ClienteCreateDto dto)
         {
-            var nuevoCliente = new Cliente
-            {
-                DNI = dto.DNI,
-                Nombre = dto.Nombre,
-                Telefono = dto.Telefono
-            };
 
-            var id = _clienteService.AgregarCliente(nuevoCliente);
-            return CreatedAtAction(nameof(ObtenerCliente), new { clienteId = id }, nuevoCliente);
+            var id = _clienteService.AgregarCliente(dto);
+            return CreatedAtAction(nameof(ObtenerCliente), new { clienteId = id }, dto);
         }
 
         // GET /clientes — Lista de clientes

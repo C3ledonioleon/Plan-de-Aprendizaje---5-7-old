@@ -1,3 +1,4 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ namespace Proyecto.Services.Contracts
     {
         List<Cliente> ObtenerTodo();            // Antes: GetAll
         Cliente? ObtenerPorId(int id);           // Antes: GetById
-        int AgregarCliente(Cliente cliente);     // Antes: Add
+        int AgregarCliente(ClienteCreateDto cliente);     // Antes: Add
         bool ActualizarCliente(int id, Cliente cliente); // Antes: Update
         bool EliminarCliente(int id);            // Antes: Delete
     }

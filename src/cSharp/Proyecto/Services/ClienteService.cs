@@ -1,3 +1,4 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
@@ -23,9 +24,15 @@ namespace Proyecto.Services
             return _clienteRepository.GetById(id);
         }
 
-        public int AgregarCliente(Cliente cliente)
+        public int AgregarCliente(ClienteCreateDto cliente)
         {
-            return _clienteRepository.Add(cliente);
+            var nuevoCliente = new Cliente
+            {
+                DNI = cliente.DNI,
+                Nombre = cliente.Nombre,
+                Telefono = cliente.Telefono
+            };
+            return _clienteRepository.Add( nuevoCliente);
         }
 
         public bool ActualizarCliente(int id, Cliente cliente)

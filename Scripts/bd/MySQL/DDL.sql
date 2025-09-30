@@ -1,5 +1,11 @@
--- Crear Base de Datos
-CREATE DATABASE IF NOT EXISTS SVE;
+
+-- Eliminar la base de datos si existe
+DROP DATABASE IF EXISTS SVE;
+
+-- Crear la base de datos
+CREATE DATABASE SVE;
+
+-- Usar la base de datos
 USE SVE;
 
 
