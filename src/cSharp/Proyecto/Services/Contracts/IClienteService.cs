@@ -2,8 +2,8 @@ using Proyecto.DTOs;
 using Proyecto.Models;
 using System.Collections.Generic;
 
-namespace Proyecto.Services.Contracts
-{
+namespace Proyecto.Services.Contracts;
+
     public interface IClienteService
     {
         List<ClienteDto> ObtenerTodo();            // Antes: GetAll
@@ -12,4 +12,3 @@ namespace Proyecto.Services.Contracts
         bool ActualizarCliente(int id, ClienteUpdateDto cliente); // Antes: Update
         bool EliminarCliente(int id);            // Antes: Delete
     }
-}

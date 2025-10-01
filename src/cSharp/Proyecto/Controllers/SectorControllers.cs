@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Linq;
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class SectoresController : ControllerBase
     {
         private readonly ISectorService _sectorService;
@@ -16,36 +17,42 @@ namespace Proyecto.Controllers
             _sectorService = sectorService;
         }
 
-        // POST /locales/{idLocal}/sectores
-        [HttpPost("locales/{idLocal}/sectores")]
-        public IActionResult CrearSector(int idLocal, Sector sector)
+        // POST /sectores — Crea un sector
+        [HttpPost]
+        public IActionResult CrearSector([FromBody] SectorCreateDto dto)
         {
-            sector.IdLocal = idLocal;  // ahora usa IdLocal
-            var id = _sectorService.AgregarSector(sector);
-            return CreatedAtAction(nameof(ObtenerSectores), new { idLocal = idLocal }, sector);
+            var id = _sectorService.AgregarSector(dto);
+            return CreatedAtAction(nameof(ObtenerSector), new { sectorId = id }, dto);
         }
 
-        // GET /locales/{idLocal}/sectores
-        [HttpGet("locales/{idLocal}/sectores")]
-        public IActionResult ObtenerSectores(int idLocal)
+        // GET /sectores — Lista todos los sectores
+        [HttpGet]
+        public IActionResult ObtenerSectores()
         {
-            var sectores = _sectorService.ObtenerTodo()
-                .Where(s => s.IdLocal == idLocal)  // ahora usa IdLocal
-                .ToList();
+            var sectores = _sectorService.ObtenerTodo();
             return Ok(sectores);
         }
 
-        // PUT /sectores/{sectorId}
-        [HttpPut("sectores/{sectorId}")]
-        public IActionResult ActualizarSector(int sectorId, Sector sector)
+        // GET /sectores/{sectorId} — Detalle de un sector
+        [HttpGet("{sectorId}")]
+        public IActionResult ObtenerSector(int sectorId)
         {
-            var actualizado = _sectorService.ActualizarSector(sectorId, sector);
+            var sector = _sectorService.ObtenerPorId(sectorId);
+            if (sector == null) return NotFound();
+            return Ok(sector);
+        }
+
+        // PUT /sectores/{sectorId} — Actualiza un sector
+        [HttpPut("{sectorId}")]
+        public IActionResult ActualizarSector(int sectorId, [FromBody] SectorUpdateDto dto)
+        {
+            var actualizado = _sectorService.ActualizarSector(sectorId, dto);
             if (!actualizado) return NotFound();
             return NoContent();
         }
 
-        // DELETE /sectores/{sectorId}
-        [HttpDelete("sectores/{sectorId}")]
+        // DELETE /sectores/{sectorId} — Elimina un sector
+        [HttpDelete("{sectorId}")]
         public IActionResult EliminarSector(int sectorId)
         {
             var eliminado = _sectorService.EliminarSector(sectorId);

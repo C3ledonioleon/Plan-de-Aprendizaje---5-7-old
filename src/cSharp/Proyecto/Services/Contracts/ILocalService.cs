@@ -1,13 +1,15 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
-namespace Proyecto.Services.Contracts
-{
+using System.Collections.Generic;
+
+namespace Proyecto.Services.Contracts;
+
     public interface ILocalService
     {
-        List<Local> ObtenerTodo ();
+        List<Local> ObtenerTodo();
         Local? ObtenerPorId(int id);
-        int AgregarLocal(Local local);
-        bool ActualizarLocal(int id, Local local);
+        int AgregarLocal(LocalCreateDto local);         // Usar DTO para creación
+        bool ActualizarLocal(int id, LocalUpdateDto local);  // Usar DTO para actualización
         bool EliminarLocal(int id);
-
     }
-}
+

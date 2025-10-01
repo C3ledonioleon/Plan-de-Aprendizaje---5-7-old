@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
-using Proyecto.DTOs;
+using System.Linq;
 
 namespace Proyecto.Controllers
 {
@@ -16,14 +17,15 @@ namespace Proyecto.Controllers
             _ordenService = ordenService;
         }
 
+        // POST /ordenes — Crea una orden
         [HttpPost]
         public IActionResult CrearOrden([FromBody] OrdenCreateDto dto)
         {
-            var id = _ordenService.AgregarOrden( dto );
-            return CreatedAtAction(nameof(ObtenerOrden), new { ordenId = id },  dto);
+            var id = _ordenService.AgregarOrden(dto);
+            return CreatedAtAction(nameof(ObtenerOrden), new { ordenId = id }, dto);
         }
 
-  
+        // GET /ordenes — Lista todas las órdenes
         [HttpGet]
         public IActionResult ObtenerOrdenes()
         {
@@ -31,7 +33,7 @@ namespace Proyecto.Controllers
             return Ok(ordenes);
         }
 
-
+        // GET /ordenes/{ordenId} — Detalle de una orden
         [HttpGet("{ordenId}")]
         public IActionResult ObtenerOrden(int ordenId)
         {
@@ -40,56 +42,22 @@ namespace Proyecto.Controllers
             return Ok(orden);
         }
 
- 
+        // PUT /ordenes/{ordenId} — Actualiza una orden
         [HttpPut("{ordenId}")]
-        public IActionResult ActualizarOrden(int ordenId, [FromBody] Orden orden)
+        public IActionResult ActualizarOrden(int ordenId, [FromBody] OrdenUpdateDto dto)
         {
-            var actualizado = _ordenService.ActualizarOrden(ordenId, orden);
+            var actualizado = _ordenService.ActualizarOrden(ordenId, dto);
             if (!actualizado) return NotFound();
             return NoContent();
         }
 
-
+        // DELETE /ordenes/{ordenId} — Elimina una orden
         [HttpDelete("{ordenId}")]
         public IActionResult EliminarOrden(int ordenId)
         {
             var eliminado = _ordenService.EliminarOrden(ordenId);
             if (!eliminado) return NotFound();
             return NoContent();
-        }
-
-   
-        [HttpPost("{ordenId}/pagar")]
-        public IActionResult PagarOrden(int ordenId)
-        {
-            var orden = _ordenService.ObtenerPorId(ordenId);
-            if (orden == null) return NotFound();
-            if (orden.Estado != EstadoOrden.Creada)
-                return BadRequest(new { mensaje = "Solo se pueden pagar órdenes en estado Creada." });
-
-            orden.Estado = EstadoOrden.Pagada;
-            _ordenService.ActualizarOrden(ordenId, orden);
-
- 
-
-            return Ok(new { mensaje = "Orden pagada y entradas emitidas." });
-        }
-
-
-        [HttpPost("{ordenId}/cancelar")]
-        public IActionResult CancelarOrden(int ordenId)
-        {
-            var orden = _ordenService.ObtenerPorId(ordenId);
-            if (orden == null) return NotFound();
-            if (orden.Estado != EstadoOrden.Creada)
-                return BadRequest(new { mensaje = "Solo se pueden cancelar órdenes en estado Creada." });
-
-            orden.Estado = EstadoOrden.Cancelada;
-            _ordenService.ActualizarOrden(ordenId, orden);
-
-
-
-            return Ok(new { mensaje = "Orden cancelada y stock liberado." });
         }
     }
 }

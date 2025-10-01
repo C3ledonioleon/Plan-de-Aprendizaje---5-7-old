@@ -2,45 +2,73 @@ using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
-
-public class FuncionService : IFuncionService
+namespace Proyecto.Services
 {
-    private readonly IFuncionRepository _funcionRepository;
-
-    public FuncionService(IFuncionRepository funcionRepository)
+    public class FuncionService : IFuncionService
     {
-        _funcionRepository = funcionRepository;
-    }
+        private readonly IFuncionRepository _funcionRepository;
 
-    public List<Funcion> ObtenerTodo()
-    {
-        return _funcionRepository.GetAll();
-    }
+        public FuncionService(IFuncionRepository funcionRepository)
+        {
+            _funcionRepository = funcionRepository;
+        }
 
-    public Funcion?  ObtenerPorId(int id)
-    {
-        return _funcionRepository.GetById(id);
-    }
+        public List<Funcion> ObtenerTodo()
+        {
+            return _funcionRepository.GetAll();
+        }
 
-    public int AgregarFuncion (FuncionCreateDto funcion)
-    {
+        public Funcion? ObtenerPorId(int id)
+        {
+            return _funcionRepository.GetById(id);
+        }
+
+        public int AgregarFuncion(FuncionCreateDto dto)
+        {
             var nuevaFuncion = new Funcion
+            {
+                IdEvento = dto.IdEvento,
+                IdLocal = dto.IdLocal,
+                FechaHora = dto.FechaHora,
+                Estado = EstadoFuncion.Pendiente // Valor inicial
+            };
+
+            return _funcionRepository.Add(nuevaFuncion);
+        }
+
+        public bool ActualizarFuncion(int id, FuncionUpdateDto dto)
+        {
+            var entidad = new Funcion
+            {
+                IdFuncion = id,
+                IdEvento = dto.IdEvento,
+                IdLocal = dto.IdLocal,
+                FechaHora = dto.FechaHora,
+                Estado = dto.Estado
+            };
+
+            return _funcionRepository.Update(id, entidad);
+        }
+
+        public bool EliminarFuncion(int id)
+        {
+            return _funcionRepository.Delete(id);
+        }
+
+        public bool CancelarFuncion(int id)
+        {
+            var funcion = _funcionRepository.GetById(id);
+            if (funcion == null) return false;
+
+            var dto = new FuncionUpdateDto
             {
                 IdEvento = funcion.IdEvento,
                 IdLocal = funcion.IdLocal,
                 FechaHora = funcion.FechaHora,
-                Estado = EstadoFuncion.Pendiente // Estado inicial
+                Estado = EstadoFuncion.Cancelada
             };
-            return _funcionRepository.Add( nuevaFuncion );
-    }
 
-    public bool ActualizarFuncion (int id, Funcion funcion)
-    {
-        return _funcionRepository.Update(id, funcion);
-    }
-
-    public bool EliminarFuncion(int id)
-    {
-        return _funcionRepository.Delete(id);
+            return ActualizarFuncion(id, dto);
+        }
     }
 }

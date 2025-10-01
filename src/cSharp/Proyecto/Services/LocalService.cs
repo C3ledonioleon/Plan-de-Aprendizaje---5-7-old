@@ -1,38 +1,46 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
-using Proyecto.Services.Contracts;
 using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
-public class LocalService : ILocalService
+namespace Proyecto.Services
 {
-    private readonly ILocalRepository _localRepository;
-
-    public LocalService(ILocalRepository localRepository)
+    public class LocalService : ILocalService
     {
-        _localRepository = localRepository;
-    }
+        private readonly ILocalRepository _localRepository;
 
-    public List<Local> ObtenerTodo()
-    {
-        return _localRepository.GetAll();
-    }
+        public LocalService(ILocalRepository localRepository)
+        {
+            _localRepository = localRepository;
+        }
 
-    public Local? ObtenerPorId(int id)
-    {
-        return _localRepository.GetById(id);
-    }
-    public int AgregarLocal(Local local)
-    {
-        return _localRepository.Add(local);
-    }
-    public bool ActualizarLocal(int id, Local local)
-    {
-        return _localRepository.Update(id, local);
+        public List<Local> ObtenerTodo() => _localRepository.GetAll();
 
-    }
+        public Local? ObtenerPorId(int id) => _localRepository.GetById(id);
 
-    public bool EliminarLocal(int id)
-    {
-        return _localRepository.Delete(id );;
-    }
+        public int AgregarLocal(LocalCreateDto dto)
+        {
+            var nuevoLocal = new Local
+            {
+                Nombre = dto.Nombre,
+                Direccion = dto.Direccion,
+                CapacidadTotal = dto.CapacidadTotal
+            };
+            return _localRepository.Add(nuevoLocal);
+        }
 
+        public bool ActualizarLocal(int id, LocalUpdateDto dto)
+        {
+            var local = new Local
+            {
+                IdLocal = id,
+                Nombre = dto.Nombre,
+                Direccion = dto.Direccion,
+                CapacidadTotal = dto.CapacidadTotal
+            };
+            return _localRepository.Update(id, local);
+        }
+
+        public bool EliminarLocal(int id) => _localRepository.Delete(id);
+    }
 }

@@ -2,8 +2,8 @@ using Proyecto.DTOs;
 using Proyecto.Models;
 using System.Collections.Generic;
 
-namespace Proyecto.Services.Contracts
-{
+namespace Proyecto.Services.Contracts;
+
     public interface IEventoService
     {
         List<Evento> ObtenerTodo();
@@ -14,4 +14,3 @@ namespace Proyecto.Services.Contracts
         bool Publicar(int id);
         bool Cancelar(int id);
     }
-}

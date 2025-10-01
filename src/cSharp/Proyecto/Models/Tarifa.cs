@@ -3,7 +3,7 @@ namespace Proyecto.Models
     public class Tarifa
     {
         public int IdTarifa { get; set; }
-        public int IdFuncion { get; set; }
+        public int  IdFuncion { get; set; }
         public int IdSector { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }

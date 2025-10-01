@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 using Proyecto.Models; 
-using Proyecto.Models;
-
 
 namespace Proyecto.DTOs
 {

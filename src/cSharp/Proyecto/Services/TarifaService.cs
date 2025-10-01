@@ -1,6 +1,9 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Proyecto.Services
 {
@@ -13,26 +16,71 @@ namespace Proyecto.Services
             _tarifaRepository = tarifaRepository;
         }
 
-        public List<Tarifa> ObtenerTodo()
+        // Devuelve todas las tarifas como DTO
+        public List<TarifaDto> ObtenerTodo()
         {
-            return _tarifaRepository.GetAll();
+            return _tarifaRepository.GetAll()
+                .Select(t => new TarifaDto
+                {
+                    IdTarifa = t.IdTarifa,
+                    IdFuncion = t.IdFuncion,
+                    IdSector = t.IdSector,
+                    Precio = t.Precio,
+                    Stock = t.Stock,
+                    Estado = t.Estado,
+                    Funcion = t.Funcion,
+                    Sector = t.Sector
+                }).ToList();
         }
 
-        public Tarifa? ObtenerPorId (int id)
+        // Devuelve una tarifa por ID
+        public TarifaDto? ObtenerPorId(int id)
         {
-            return _tarifaRepository.GetById(id);
+            var t = _tarifaRepository.GetById(id);
+            if (t == null) return null;
+
+            return new TarifaDto
+            {
+                IdTarifa = t.IdTarifa,
+                IdFuncion = t.IdFuncion,
+                IdSector = t.IdSector,
+                Precio = t.Precio,
+                Stock = t.Stock,
+                Estado = t.Estado,
+                Funcion = t.Funcion,
+                Sector = t.Sector
+            };
         }
 
-        public int AgregarTarifa (Tarifa tarifa)
+        // Crea una tarifa nueva
+        public int AgregarTarifa(TarifaCreateDto dto)
         {
+            var tarifa = new Tarifa
+            {
+                IdFuncion = dto.IdFuncion,
+                IdSector = dto.IdSector,
+                Precio = dto.Precio,
+                Stock = dto.Stock,
+                Estado = dto.Estado
+            };
+
             return _tarifaRepository.Add(tarifa);
         }
 
-        public bool ActualizarTarifa(int id, Tarifa tarifa)
+        // Actualiza una tarifa existente
+        public bool ActualizarTarifa(int id, TarifaUpdateDto dto)
         {
+            var tarifa = new Tarifa
+            {
+                Precio = dto.Precio,
+                Stock = dto.Stock,
+                Estado = dto.Estado
+            };
+
             return _tarifaRepository.Update(id, tarifa);
         }
 
+        // Elimina una tarifa por ID
         public bool EliminarTarifa(int id)
         {
             return _tarifaRepository.Delete(id);

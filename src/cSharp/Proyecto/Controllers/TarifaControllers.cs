@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Proyecto.Models;
+using Proyecto.DTOs;
 using Proyecto.Services.Contracts;
+using System.Linq;
 
 namespace Proyecto.Controllers
 {
     [ApiController]
-    [Route("api[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class TarifasController : ControllerBase
     {
         private readonly ITarifaService _tarifaService;
@@ -16,25 +17,23 @@ namespace Proyecto.Controllers
         }
 
         // POST /tarifas — Crea una Tarifa
-        [HttpPost("tarifas")]
-        public IActionResult CrearTarifa(Tarifa tarifa)
+        [HttpPost]
+        public IActionResult CrearTarifa([FromBody] TarifaCreateDto dto)
         {
-            var id = _tarifaService.AgregarTarifa(tarifa);
-            return CreatedAtAction(nameof(ObtenerTarifa), new { tarifaId = id }, tarifa);
+            var id = _tarifaService.AgregarTarifa(dto);
+            return CreatedAtAction(nameof(ObtenerTarifa), new { tarifaId = id }, dto);
         }
 
-        // GET /funciones/{funcionId}/tarifas — Lista tarifas de una función
-        [HttpGet("funciones/{funcionId}/tarifas")]
-        public IActionResult ObtenerTarifas(int funcionId)
+        // GET /tarifas — Lista todas las tarifas
+        [HttpGet]
+        public IActionResult ObtenerTarifas()
         {
-            var tarifas = _tarifaService.ObtenerTodo()
-                                        .Where(t => t.IdFuncion == funcionId)
-                                        .ToList();
+            var tarifas = _tarifaService.ObtenerTodo();
             return Ok(tarifas);
         }
 
         // GET /tarifas/{tarifaId} — Detalle de tarifa
-        [HttpGet("tarifas/{tarifaId}")]
+        [HttpGet("{tarifaId}")]
         public IActionResult ObtenerTarifa(int tarifaId)
         {
             var tarifa = _tarifaService.ObtenerPorId(tarifaId);
@@ -42,14 +41,22 @@ namespace Proyecto.Controllers
             return Ok(tarifa);
         }
 
-        // PUT /tarifas/{tarifaId} — Actualiza precio/stock/estado
-        [HttpPut("tarifas/{tarifaId}")]
-        public IActionResult ActualizarTarifa(int tarifaId,Tarifa tarifa)
+        // PUT /tarifas/{tarifaId} — Actualiza precio, stock o estado
+        [HttpPut("{tarifaId}")]
+        public IActionResult ActualizarTarifa(int tarifaId, [FromBody] TarifaUpdateDto dto)
         {
-            var actualizado = _tarifaService.ActualizarTarifa(tarifaId, tarifa);
+            var actualizado = _tarifaService.ActualizarTarifa(tarifaId, dto);
             if (!actualizado) return NotFound();
+            return NoContent();
+        }
+
+        // DELETE /tarifas/{tarifaId} — Elimina una tarifa
+        [HttpDelete("{tarifaId}")]
+        public IActionResult EliminarTarifa(int tarifaId)
+        {
+            var eliminado = _tarifaService.EliminarTarifa(tarifaId);
+            if (!eliminado) return NotFound();
             return NoContent();
         }
     }
 }
-        

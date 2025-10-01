@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
-using Proyecto.Services.Contracts;
 using Proyecto.DTOs;
+using Proyecto.Services.Contracts;
 
 namespace Proyecto.Controllers
 {
@@ -43,9 +43,9 @@ namespace Proyecto.Controllers
 
         // PUT /funciones/{funcionId} — Actualiza función
         [HttpPut("{funcionId}")]
-        public IActionResult ActualizarFuncion(int funcionId, [FromBody] Funcion funcion)
+        public IActionResult ActualizarFuncion(int funcionId, [FromBody] FuncionUpdateDto dto)
         {
-            var actualizado = _funcionService.ActualizarFuncion(funcionId, funcion);
+            var actualizado = _funcionService.ActualizarFuncion(funcionId, dto);
             if (!actualizado) return NotFound();
             return NoContent();
         }
@@ -63,13 +63,8 @@ namespace Proyecto.Controllers
         [HttpPost("{funcionId}/cancelar")]
         public IActionResult CancelarFuncion(int funcionId)
         {
-            var funcion = _funcionService.ObtenerPorId(funcionId);
-            if (funcion == null) return NotFound();
-
-            funcion.Estado = EstadoFuncion.Cancelada; // suponiendo que el modelo tiene un campo Estado
-            var actualizado = _funcionService.ActualizarFuncion(funcionId, funcion);
-
-            if (!actualizado) return BadRequest();
+            var actualizado = _funcionService.CancelarFuncion(funcionId);
+            if (!actualizado) return NotFound();
             return Ok(new { mensaje = "Función cancelada correctamente" });
         }
     }

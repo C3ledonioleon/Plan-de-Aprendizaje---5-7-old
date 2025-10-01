@@ -1,6 +1,8 @@
 using Proyecto.Models;
+using Proyecto.DTOs;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
+using System.Collections.Generic;
 
 namespace Proyecto.Services
 {
@@ -13,29 +15,36 @@ namespace Proyecto.Services
             _sectorRepository = sectorRepository;
         }
 
-        public List<Sector> ObtenerTodo ()
+        public List<Sector> ObtenerTodo() => _sectorRepository.GetAll();
+
+        public Sector? ObtenerPorId(int id) => _sectorRepository.GetById(id);
+
+        public int AgregarSector(SectorCreateDto dto)
         {
-           return _sectorRepository.GetAll();
+            var nuevoSector = new Sector
+            {
+                Nombre = dto.Nombre,
+                Capacidad = dto.Capacidad,
+                IdLocal = dto.IdLocal
+            };
+            return _sectorRepository.Add(nuevoSector);
         }
 
-        public Sector? ObtenerPorId (int id)
+        public bool ActualizarSector(int id, SectorUpdateDto dto)
         {
-            return _sectorRepository.GetById(id);
-        }
-
-        public int AgregarSector (Sector sector)
-        {
-             return _sectorRepository.Add(sector);
-        }
-
-        public bool ActualizarSector(int id, Sector sector)
-        {
+            var sector = new Sector
+            {
+                IdSector = id,
+                Nombre = dto.Nombre,
+                Capacidad = dto.Capacidad,
+                IdLocal = dto.IdLocal
+            };
             return _sectorRepository.Update(id, sector);
         }
 
-        public bool EliminarSector (int id)
+        public bool EliminarSector(int id)
         {
-             return _sectorRepository.Delete(id);
+            return _sectorRepository.Delete(id);
         }
     }
 }

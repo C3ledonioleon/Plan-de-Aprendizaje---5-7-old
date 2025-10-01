@@ -3,8 +3,8 @@ using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
 using Proyecto.Services.Contracts;
 
-namespace Proyecto.Services
-{
+namespace Proyecto.Services;
+
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
@@ -60,4 +60,3 @@ namespace Proyecto.Services
             return _clienteRepository.Delete(id);
         }
     }
-}

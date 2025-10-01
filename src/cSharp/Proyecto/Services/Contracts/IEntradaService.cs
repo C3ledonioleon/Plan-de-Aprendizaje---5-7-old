@@ -2,8 +2,8 @@ using Proyecto.DTOs;
 using Proyecto.Models;
 using System.Collections.Generic;
 
-namespace Proyecto.Services.Contracts
-{
+namespace Proyecto.Services.Contracts;
+
     public interface IEntradaService
     {
         List<Entrada> ObtenerTodo();
@@ -13,4 +13,3 @@ namespace Proyecto.Services.Contracts
         bool AnularEntrada(int id);
         bool EliminarEntrada(int id);
     }
-}

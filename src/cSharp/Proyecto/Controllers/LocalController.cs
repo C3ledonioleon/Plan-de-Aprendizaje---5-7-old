@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
 
@@ -15,45 +16,36 @@ namespace Proyecto.Controllers
             _localService = localService;
         }
 
-        // POST /locales — Crea un Local
         [HttpPost]
-        public IActionResult CrearLocal([FromBody] Local local)
+        public IActionResult CrearLocal([FromBody] LocalCreateDto dto)
         {
-            var id = _localService.AgregarLocal(local);
-            return CreatedAtAction(nameof(ObtenerLocal), new { localId = id }, local);
+            var id = _localService.AgregarLocal(dto);
+            return CreatedAtAction(nameof(ObtenerLocal), new { idLocal = id }, dto);
         }
 
-        // GET /locales — Lista de locales
         [HttpGet]
-        public IActionResult ObtenerLocales()
-        {
-            var locales = _localService.ObtenerTodo();
-            return Ok(locales);
-        }
+        public IActionResult ObtenerLocales() => Ok(_localService.ObtenerTodo());
 
-        // GET /locales/{localId} — Detalle de un local
-        [HttpGet("{localId}")]
-        public IActionResult ObtenerLocal(int localId)
+        [HttpGet("{idLocal}")]
+        public IActionResult ObtenerLocal(int idLocal)
         {
-            var local = _localService.ObtenerPorId(localId);
+            var local = _localService.ObtenerPorId(idLocal);
             if (local == null) return NotFound();
             return Ok(local);
         }
 
-        // PUT /locales/{localId} — Actualiza datos del local
-        [HttpPut("{localId}")]
-        public IActionResult ActualizarLocal(int localId, [FromBody] Local local)
+        [HttpPut("{idLocal}")]
+        public IActionResult ActualizarLocal(int idLocal, [FromBody] LocalUpdateDto dto)
         {
-            var actualizado = _localService.ActualizarLocal(localId, local);
+            var actualizado = _localService.ActualizarLocal(idLocal, dto);
             if (!actualizado) return NotFound();
             return NoContent();
         }
 
-        // DELETE /locales/{localId} — Elimina un local (si no tiene funciones vigentes)
-        [HttpDelete("{localId}")]
-        public IActionResult EliminarLocal(int localId)
+        [HttpDelete("{idLocal}")]
+        public IActionResult EliminarLocal(int idLocal)
         {
-            var eliminado = _localService.EliminarLocal(localId);
+            var eliminado = _localService.EliminarLocal(idLocal);
             if (!eliminado) return NotFound();
             return NoContent();
         }
