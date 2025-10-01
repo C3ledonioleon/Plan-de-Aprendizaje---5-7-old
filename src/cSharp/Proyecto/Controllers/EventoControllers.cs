@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Services.Contracts;
-using Proyecto.DTOs;
-
 
 namespace Proyecto.Controllers
 {
@@ -17,7 +16,6 @@ namespace Proyecto.Controllers
             _eventoService = eventoService;
         }
 
-        // POST /eventos — Crea un Evento
         [HttpPost]
         public IActionResult CrearEvento([FromBody] EventoCreateDto dto)
         {
@@ -25,7 +23,6 @@ namespace Proyecto.Controllers
             return CreatedAtAction(nameof(ObtenerEvento), new { eventoId = id }, dto);
         }
 
-        // GET /eventos — Lista eventos
         [HttpGet]
         public IActionResult ObtenerEventos()
         {
@@ -33,7 +30,6 @@ namespace Proyecto.Controllers
             return Ok(eventos);
         }
 
-        // GET /eventos/{eventoId} — Detalle de un evento
         [HttpGet("{eventoId}")]
         public IActionResult ObtenerEvento(int eventoId)
         {
@@ -42,16 +38,14 @@ namespace Proyecto.Controllers
             return Ok(evento);
         }
 
-        // PUT /eventos/{eventoId} — Actualiza datos del evento
         [HttpPut("{eventoId}")]
-        public IActionResult ActualizarEvento(int eventoId, [FromBody] Evento evento)
+        public IActionResult ActualizarEvento(int eventoId, [FromBody] EventoUpdateDto dto)
         {
-            var actualizado = _eventoService.ActualizarEvento(eventoId, evento);
+            var actualizado = _eventoService.ActualizarEvento(eventoId, dto);
             if (!actualizado) return NotFound();
             return NoContent();
         }
 
-        // DELETE /eventos/{eventoId} — Elimina un evento
         [HttpDelete("{eventoId}")]
         public IActionResult EliminarEvento(int eventoId)
         {
@@ -60,7 +54,6 @@ namespace Proyecto.Controllers
             return NoContent();
         }
 
-        // POST /eventos/{eventoId}/publicar — Publica un evento
         [HttpPost("{eventoId}/publicar")]
         public IActionResult PublicarEvento(int eventoId)
         {
@@ -69,18 +62,11 @@ namespace Proyecto.Controllers
             return Ok(new { mensaje = "Evento publicado correctamente" });
         }
 
-        // POST /eventos/{eventoId}/cancelar — Cancela un evento
         [HttpPost("{eventoId}/cancelar")]
-        public IActionResult CancelarEvento(int eventoId)
+        public IActionResult CancelarEvento(int Id)
         {
-            // 👇 No existe Cancelar en tu interfaz, pero podés implementarlo reutilizando ActualizarEvento
-            var evento = _eventoService.ObtenerPorId(eventoId);
-            if (evento == null) return NotFound();
-
-            evento.Estado = EstadoEvento.Cancelado; // suponiendo que tenés un campo Estado
-            var actualizado = _eventoService.ActualizarEvento(eventoId, evento);
-
-            if (!actualizado) return BadRequest();
+            var cancelado = _eventoService.Cancelar( Id);
+            if (!cancelado) return NotFound();
             return Ok(new { mensaje = "Evento cancelado correctamente" });
         }
     }

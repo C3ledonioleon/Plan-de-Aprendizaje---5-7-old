@@ -16,40 +16,80 @@ namespace Proyecto.Services
 
         public List<Evento> ObtenerTodo()
         {
-            return _eventoRepository.GetAll();
+            var evento = _eventoRepository.GetAll();
+            return evento.Select(evento => new Evento
+            {
+                IdEvento = evento.IdEvento,
+                Nombre = evento.Nombre,
+                Descripcion = evento.Descripcion,
+                FechaInicio = evento.FechaInicio,
+                FechaFin = evento.FechaFin,
+                Estado = evento.Estado
+            }).ToList();
         }
 
         public Evento? ObtenerPorId(int id)
         {
-            return _eventoRepository.GetById(id);
+            var evento = _eventoRepository.GetById(id);
+            if (evento == null) return null;
+            return new Evento
+            {
+                IdEvento = evento.IdEvento,
+                Nombre = evento.Nombre,
+                Descripcion = evento.Descripcion,
+                FechaInicio = evento.FechaInicio,
+                FechaFin = evento.FechaFin,
+                Estado = evento.Estado
+            };
         }
+
         public int AgregarEvento(EventoCreateDto evento)
         {
-        var  nuevoEvento = new Evento
-        {
+            var nuevoEvento = new Evento
+            {
+                Nombre = evento.Nombre,
+                Descripcion = evento.Descripcion,
+                FechaInicio = evento.FechaInicio,
+                FechaFin = evento.FechaFin,
+                Estado = EstadoEvento.Inactivo
+            };
+            return _eventoRepository.Add(nuevoEvento);
+        }
+            public bool ActualizarEvento(int id, EventoUpdateDto evento)
+            {
+            var entidadEvento = new Evento
+            {
+            IdEvento = id,
             Nombre = evento.Nombre,
             Descripcion = evento.Descripcion,
             FechaInicio = evento.FechaInicio,
             FechaFin = evento.FechaFin,
-            Estado = EstadoEvento.Inactivo
-        };
-            return _eventoRepository.Add( nuevoEvento );
-        }
-
-        public bool ActualizarEvento(int id, Evento evento)
-        {
-            return _eventoRepository.Update(id, evento);
-        }
+            Estado = evento.Estado
+            };
+    return _eventoRepository.Update(id, entidadEvento);
+}
 
         public bool EliminarEvento(int id)
         {
             return _eventoRepository.Delete(id);
         }
-        public bool Publicar(int Id)
+
+        public bool Publicar(int id)
         {
-            var evento = _eventoRepository.GetById(Id);
+            var evento = _eventoRepository.GetById(id);
+            if (evento == null) return false;
+
             evento.Estado = EstadoEvento.Publicado;
-            return _eventoRepository.Update(Id, evento);
+            return _eventoRepository.Update(id, evento);
+        }
+
+        public bool Cancelar(int id)
+        {
+            var evento = _eventoRepository.GetById(id);
+            if (evento == null) return false;
+
+            evento.Estado = EstadoEvento.Cancelado;
+            return _eventoRepository.Update(id, evento);
         }
     }
 }

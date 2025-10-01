@@ -9,8 +9,9 @@ namespace Proyecto.Services.Contracts
         List<Evento> ObtenerTodo();
         Evento? ObtenerPorId(int id);
         int AgregarEvento(EventoCreateDto evento);
-        bool ActualizarEvento(int id, Evento evento);
+        bool ActualizarEvento(int id, EventoUpdateDto evento );
         bool EliminarEvento(int id);
-        bool Publicar(int Id);
+        bool Publicar(int id);
+        bool Cancelar(int id);
     }
 }
