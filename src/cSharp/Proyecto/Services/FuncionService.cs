@@ -1,5 +1,7 @@
+using Proyecto.DTOs;
 using Proyecto.Models;
 using Proyecto.Repositories.Contracts;
+using Proyecto.Services.Contracts;
 
 public class FuncionService : IFuncionService
 {
@@ -20,16 +22,16 @@ public class FuncionService : IFuncionService
         return _funcionRepository.GetById(id);
     }
 
-    public int AgregarFuncion (FucionCreateDto fucion)
+    public int AgregarFuncion (FuncionCreateDto funcion)
     {
-            var nuevaEntrada = new Funcion
+            var nuevaFuncion = new Funcion
             {
-                Precio = funcion.Precio,
-                IdOrden = funcion.IdOrden,
-                IdTarifa = funcion.IdTarifa,
-                Estado = EstadoEntrada.Activa
+                IdEvento = funcion.IdEvento,
+                IdLocal = funcion.IdLocal,
+                FechaHora = funcion.FechaHora,
+                Estado = EstadoFuncion.Pendiente // Estado inicial
             };
-            return _entradaRepository.Add( nuevaEntrada);
+            return _funcionRepository.Add( nuevaFuncion );
     }
 
     public bool ActualizarFuncion (int id, Funcion funcion)

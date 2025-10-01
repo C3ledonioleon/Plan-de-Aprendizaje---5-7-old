@@ -14,11 +14,18 @@ namespace Proyecto.Services
             _clienteRepository = clienteRepository;
         }
 
-        public List<Cliente> ObtenerTodo()
+        public List<ClienteDto> ObtenerTodo()
         {
-            return _clienteRepository.GetAll();
+            return _clienteRepository.GetAll()
+                .Select(cliente => new ClienteDto
+                {
+                    IdCliente = cliente.IdCliente,
+                    DNI = cliente.DNI,
+                    Nombre = cliente.Nombre,
+                    Telefono = cliente.Telefono
+                })
+                .ToList();
         }
-
         public Cliente? ObtenerPorId(int id)
         {
             return _clienteRepository.GetById(id);
@@ -26,6 +33,7 @@ namespace Proyecto.Services
 
         public int AgregarCliente(ClienteCreateDto cliente)
         {
+            
             var nuevoCliente = new Cliente
             {
                 DNI = cliente.DNI,
@@ -35,11 +43,18 @@ namespace Proyecto.Services
             return _clienteRepository.Add( nuevoCliente);
         }
 
-        public bool ActualizarCliente(int id, Cliente cliente)
+      // Actualizar cliente
+        public bool ActualizarCliente(int id, ClienteUpdateDto cliente )
         {
-            return _clienteRepository.Update(id, cliente);
-        }
+            var clienteExistente = _clienteRepository.GetById(id);
+            if (clienteExistente == null) return false;
 
+            clienteExistente.DNI = cliente.DNI;
+            clienteExistente.Nombre = cliente.Nombre;
+            clienteExistente.Telefono = cliente.Telefono;
+
+            return _clienteRepository.Update(id, clienteExistente);
+        }
         public bool EliminarCliente(int id)
         {
             return _clienteRepository.Delete(id);

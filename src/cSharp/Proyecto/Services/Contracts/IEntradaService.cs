@@ -9,7 +9,8 @@ namespace Proyecto.Services.Contracts
         List<Entrada> ObtenerTodo();
         Entrada? ObtenerPorId(int id);
         int AgregarEntrada(EntradaCreateDto entrada);
-        bool ActualizarEntrada (int id, Entrada entrada);
+        bool ActualizarEntrada (int id, EntradaUpdateDto entrada);
+        bool AnularEntrada(int id);
         bool EliminarEntrada(int id);
     }
 }

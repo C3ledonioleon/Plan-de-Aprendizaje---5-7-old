@@ -16,16 +16,14 @@ namespace Proyecto.Controllers
             _clienteService = clienteService;
         }
 
-        // POST /clientes — Alta de cliente
         [HttpPost]
         public IActionResult CrearCliente([FromBody] ClienteCreateDto dto)
         {
 
             var id = _clienteService.AgregarCliente(dto);
-            return CreatedAtAction(nameof(ObtenerCliente), new { clienteId = id }, dto);
+            return CreatedAtAction(nameof(ObtenerClientePorId), new { clienteId = id }, dto);
         }
 
-        // GET /clientes — Lista de clientes
         [HttpGet]
         public IActionResult ObtenerClientes()
         {
@@ -35,7 +33,7 @@ namespace Proyecto.Controllers
 
         // GET /clientes/{clienteId} — Detalle de cliente
         [HttpGet("{clienteId}")]
-        public IActionResult ObtenerCliente(int clienteId)
+        public IActionResult ObtenerClientePorId(int clienteId)
         {
             var cliente = _clienteService.ObtenerPorId(clienteId);
             if (cliente == null)
@@ -44,21 +42,19 @@ namespace Proyecto.Controllers
         }
 
         // PUT /clientes/{clienteId} — Actualiza datos
-        [HttpPut("{clienteId}")]
-        public IActionResult ActualizarCliente(int clienteId, [FromBody] ClienteCreateDto dto)
-        {
-            var clienteExistente = _clienteService.ObtenerPorId(clienteId);
-            if (clienteExistente == null)
-                return NotFound();
-
-            clienteExistente.DNI = dto.DNI;
-            clienteExistente.Nombre = dto.Nombre;
-            clienteExistente.Telefono = dto.Telefono;
-
-            var actualizado = _clienteService.ActualizarCliente(clienteId, clienteExistente);
-            if (!actualizado) return BadRequest();
-
-            return NoContent();
+         [HttpPut("{clienteId}")]
+          public IActionResult ActualizarCliente(int clienteId, [FromBody] ClienteUpdateDto dto)
+       {
+       // Llamamos al servicio para actualizar directamente
+        var actualizado = _clienteService.ActualizarCliente(clienteId, dto);
+      if (!actualizado)
+        {   
+        // Si el cliente no existe, respondemos con 404
+        return NotFound();
         }
+        // Si se actualizó correctamente, respondemos 204 No Content
+        return NoContent();
+        }
+
     }
 }

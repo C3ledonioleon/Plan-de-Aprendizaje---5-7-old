@@ -36,20 +36,15 @@ namespace Proyecto.Controllers
         }
 
         // POST /api/entradas/{entradaId}/anular
-        [HttpPost("{entradaId}/anular")]
-        public ActionResult AnularEntrada(int entradaId)
-        {
-            var entrada = _entradaService.ObtenerPorId(entradaId);
-            if (entrada == null)
-                return NotFound($"No se encontró la entrada con ID {entradaId}");
-                
-            entrada.Estado = EstadoEntrada.Anulada; 
-            var actualizado = _entradaService.ActualizarEntrada(entradaId, entrada);
+// POST /api/entradas/{entradaId}/anular
+[HttpPost("{entradaId}/anular")]
+public ActionResult AnularEntrada(int entradaId)
+{
+    var resultado = _entradaService.AnularEntrada(entradaId);
+    if (!resultado)
+        return NotFound($"No se encontró la entrada con ID {entradaId}");
 
-            if (!actualizado)
-                return StatusCode(500, "No se pudo anular la entrada.");
-
-            return Ok($"La entrada con ID {entradaId} fue anulada correctamente.");
-        }
+    return Ok($"La entrada con ID {entradaId} fue anulada correctamente.");
+}
     }
 }

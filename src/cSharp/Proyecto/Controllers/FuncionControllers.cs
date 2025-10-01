@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Proyecto.Models;
+using Proyecto.Services.Contracts;
+using Proyecto.DTOs;
 
 namespace Proyecto.Controllers
 {
@@ -16,10 +18,10 @@ namespace Proyecto.Controllers
 
         // POST /funciones — Crea una Función
         [HttpPost]
-        public IActionResult CrearFuncion([FromBody] Funcion funcion)
+        public IActionResult CrearFuncion([FromBody] FuncionCreateDto dto)
         {
-            var id = _funcionService.AgregarFuncion(funcion);
-            return CreatedAtAction(nameof(ObtenerFuncion), new { funcionId = id }, funcion);
+            var id = _funcionService.AgregarFuncion(dto);
+            return CreatedAtAction(nameof(ObtenerFuncion), new { funcionId = id }, dto);
         }
 
         // GET /funciones — Lista funciones

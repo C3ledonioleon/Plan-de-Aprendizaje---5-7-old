@@ -35,11 +35,29 @@ namespace Proyecto.Services
             };
             return _entradaRepository.Add( nuevaEntrada);
         }
-        public bool ActualizarEntrada(int id, Entrada entrada)
+        public bool ActualizarEntrada(int id, EntradaUpdateDto entrada)
         {
-            return _entradaRepository.Update(id, entrada);
+             var existente = _entradaRepository.GetById(id);
+            if (existente == null) return false;
+
+            existente.Precio = entrada.Precio;
+            existente.IdOrden = entrada.IdOrden;
+            existente.IdTarifa = entrada.IdTarifa;
+            existente.Estado = entrada.Estado;
+            
+            return _entradaRepository.Update(id,existente);
         }
 
+
+                // Anular entrada
+        public bool AnularEntrada(int id)
+        {
+            var entrada = _entradaRepository.GetById(id);
+            if (entrada == null) return false;
+
+            entrada.Estado = EstadoEntrada.Anulada;
+            return _entradaRepository.Update(id, entrada);
+        }
         public bool EliminarEntrada(int id)
         {
             return _entradaRepository.Delete(id);
