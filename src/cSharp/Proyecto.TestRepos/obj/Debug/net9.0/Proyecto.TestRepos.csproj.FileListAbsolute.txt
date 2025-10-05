@@ -1,0 +1,5 @@
+C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\src\cSharp\Proyecto.TestRepos\obj\Debug\net9.0\Proyecto.TestRepos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\src\cSharp\Proyecto.TestRepos\obj\Debug\net9.0\Proyecto.TestRepos.AssemblyInfoInputs.cache
+C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\src\cSharp\Proyecto.TestRepos\obj\Debug\net9.0\Proyecto.TestRepos.AssemblyInfo.cs
+C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\src\cSharp\Proyecto.TestRepos\obj\Debug\net9.0\Proyecto.TestRepos.csproj.CoreCompileInputs.cache
+C:\Users\Celedonio\Desktop\Plan-de-Aprendizaje---5-7\src\cSharp\Proyecto.TestRepos\obj\Debug\net9.0\Proyecto.TestRepos.sourcelink.json
